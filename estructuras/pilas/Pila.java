@@ -1,0 +1,20 @@
+package pilas;
+
+import excepciones.DesbordamientoInferior;
+
+public interface Pila {
+	/**Inserta un elemento al final de la pila**/
+	public void apliar(Object elemento);
+	
+	/**Elimina el ultimo elemento de la pila que se inserto
+	 * @throws DesbordamientoInferior */
+	public void desapilar() throws DesbordamientoInferior;
+	
+	/**Devuelve el ultimo elemento que se inserto en la pila
+	 * @throws DesbordamientoInferior **/
+	public Object cima() throws DesbordamientoInferior;
+	
+	/**Devuelve cierto si la pila esta vacia y falso en cualquier otro caso*/
+	public boolean esVacia();
+
+}
