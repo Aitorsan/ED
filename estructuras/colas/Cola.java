@@ -5,6 +5,7 @@ public interface Cola {
 
 	/**Inserta un elemento al final de la cola**/
 	public void insertar(Object elemento);
+	
 	/**Devuelve el elemento que lleva mas tiempo en la cola**/
 	public Object primero() throws DesbordamientoInferior;
 	
