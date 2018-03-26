@@ -15,13 +15,13 @@ public class PilaEnlazada implements Pila {
 	
 	/**Inserta un elemnto al final de la pila**/
 	@Override
-	public void apliar(Object elemento) {
+	public void apilar(Object elemento) {
 
 		//Se crea un nuevo nodo y se añade al final de la lista
 		Nodo nodo = new Nodo(elemento);
 		
 		//El nodo apunta al último elemento de la lista
-		nodo.setEnlace(nodo);
+		nodo.setEnlace(cima);
 		
 		//La cima se actualiza, dado que ahor aes el nuevo elemento apilado
 		cima = nodo;

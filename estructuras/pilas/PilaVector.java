@@ -20,7 +20,7 @@ public class PilaVector implements Pila{
 	
 	/**Inseta un elemento al final de la pila**/
 	@Override
-	public void apliar(Object elemento) {
+	public void apilar(Object elemento) {
 		//Si el vector esta lleno, se le indica al usuario
 		if( numElementos >= datos.length) {
 			System.out.println("La pila esta llena y no se pueden apilar mas elementos");

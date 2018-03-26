@@ -4,7 +4,7 @@ import excepciones.DesbordamientoInferior;
 
 public interface Pila {
 	/**Inserta un elemento al final de la pila**/
-	public void apliar(Object elemento);
+	public void apilar(Object elemento);
 	
 	/**Elimina el ultimo elemento de la pila que se inserto
 	 * @throws DesbordamientoInferior */

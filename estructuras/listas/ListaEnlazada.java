@@ -130,8 +130,6 @@ public class ListaEnlazada implements Lista{
 		
 	}
 	
-	
-	
 	/**Muestra por pantalla la lista de objectos**/
 	public void imprimir() {
 		

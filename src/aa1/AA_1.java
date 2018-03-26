@@ -2,55 +2,17 @@ package aa1;
 import colas.*;
 import excepciones.DesbordamientoInferior;
 import listas.*;
+import pilas.Pila;
+import pilas.PilaEnlazada;
+
+/**
+ * APARTADO 2 de la actividad AA1 ESTRUCTURAS DE DATOS-UDIMA
+ * @author aitorSf
+ */
 public class AA_1 {
 	
-	
-	public static void main( String [] args) {
-		
-	/*
-	 * Apartado 2: TEST  Ejercicio 1:
-	 */
-		/*Prueba con cola vector*/
-		Cola c = new ColaVector(6);
-		c.insertar(10);
-		c.insertar(5);
-		c.insertar(12);
-		c.insertar(2);
-		c.insertar(3);
-		c.insertar(1);
-        try {
-        	    System.out.println("primer elemento de cola \"c\" ANTES de usar la funcion maxCola:"+ (int)c.primero());
-        	    System.out.println("max value: "+ maxCola(c));
- 		    System.out.println("primer elemento de cola \"c\"DESPUES de usar la funcion maxCola:"+ (int)c.primero());
-        } catch (DesbordamientoInferior e) {
-        	    System.out.println(e.getMessage());
-		}
-        
-        /*Prueba con cola Enlazada*/   
-        Cola d = new ColaEnlazada();
-        d.insertar(10);
-		d.insertar(5);
-		d.insertar(12);
-		d.insertar(2);
-		d.insertar(33);
-		d.insertar(1);
-        try {	
-        	    System.out.println("primer elemento de cola \"d\" ANTES de usar la funcion maxCola:"+ (int)d.primero());
-			System.out.println("max value: "+ maxCola(d));
-			System.out.println("primer elemento de cola \"d\"DESPUES de usar la funcion maxCola:"+ (int)d.primero());
-		
-        } catch (DesbordamientoInferior e) {
-        	    System.out.println(e.getMessage());
-	
-		}
-		
-	
-	
-		
-		
-		
-	}
-	/**Apartado 2: Ejercicio 1: 
+
+	/**APARTADO 2: EJERCICIO 1: 
 	 * - función en Java que recibe una cola y retorna el valor más alto de los almacenados en la cola.
 	 * - Los elementos que conforman la cola son números enteros.
 	 * - La cola, tras la llamada a la función, queda en el mismo estado, mismo número de elementos 
@@ -58,7 +20,7 @@ public class AA_1 {
 	 * - La función debe trabajar exclusivamente con los métodos de la interfaz Cola. */
 	public static int maxCola(Cola cola) {
 		
-		int max_value = -1;
+		Integer max_value = null;
 	if( !cola.esVacia()) {
 		Cola aux = new ColaEnlazada();
 		try {
@@ -73,9 +35,7 @@ public class AA_1 {
 			       aux.insertar(cola.primero());
 					cola.quitarPrimero();
 				}
-				
 			}
-		
 			while( !aux.esVacia()) {
 				cola.insertar(aux.primero());
 				aux.quitarPrimero();
@@ -87,16 +47,101 @@ public class AA_1 {
 	}else {
 		System.out.println("La cola esta vacia");
 	}
-		
 		return max_value;
 	}
 	
-	
 	/**
-	 *  APARTADO 2: EJERCICIO 2
+	 *  APARTADO 2: EJERCICIO 2 
 	 *  Metodo que convierte un numero a un string en binario.
 	 */
 	public static String to_binary_string(int numero) {
+		//string usado para la representacion binaria
+		String s = "";
+		//estructura de datos utilizada
+        Pila c = new PilaEnlazada();
+        try {
+        	
+			while( numero > 0) {
+				c.apilar(numero % 2);// si el numero es par nos da de resto 0 de lo contrario nos da 1, este resultado lo apilamos 
+				numero/=2;// dividimos el numero por factor de dos
+			}
+		
+			//mientras la pila no esta vacia insertamos los elementos en el string uno a uno en orden inverso
+			while( !c.esVacia()) {
+				s+=c.cima();
+				c.desapilar();
+			}
+        }catch(DesbordamientoInferior e) {
+        	   System.out.println(e.getMessage());
+        }
+			return s;
+	}
+	/**
+	 * APARTADO 2: EJERCICIO 3
+	 * Se desea implementan una función en Java que reciba una lista y dos objetos o1 y o2.
+	 *  La función debe reemplazar todas las ocurrencias del objeto o1 por el objeto o2.[X]
+	 *  1.Si el objeto o1 no se encuentra en la lista no se realizará ningún reemplazo.[X]
+	 *  2.La lista, tras la llamada a la función, debe tener el mismo número de elementos 
+	 *  y en el mismo orden que originalmente: será exactamente igual salvo por los elementos reemplazados.[X]
+	 *  3.Se trabajará con objetos (clase Object de Java).[X]
+	 *  4.La función debe trabajar exclusivamente con los métodos de la interfaz Lista.[X]
+	 */
+	public static void reemplazar(Lista lista, Object o1, Object o2) {
+		//situamos el nodo actual en el primer elemento  para recorrer la lista desde el principio 
+		lista.primero();
+		    //mientras se encuentre el elemento buscado, situamos el nodo actual en odnde esta el elemento que queremos sustituir
+		    while( lista.buscar(o1) ) {
+			lista.insertar(o2);// Insertamos el nuevo elemento justo despues del que queremos sustituir
+			lista.eliminar(o1);//eliminamos el nodo y de este modo queda en la misma posicion que estaba
+		}
+	}
+	
+	
+	
+/*-***********************************************************************************************************************************
+ * ALTERNATIVAS PARA EL APARTADO 2: EJERCICIO 2
+ *************************************************************************************************************************************/
+	
+	/**
+	 *  APARTADO 2: EJERCICIO 2.1(Alternativa 1) 
+	 *  Metodo que convierte un numero a un string en binario.
+	 */
+	public static String to_binary_string_bit(int numero) {
+		
+		String s = "";
+
+			while( numero > 0) {
+				/* El equivalente a modulo operator usando bit operators es ("numero" AND 2^n-1), esto nos da la misma operacion.
+				 * 
+				 * Logica para convertir a binary string:
+				 * 
+				 * Al dividir cualquier numero entre 2, el resto solo nos puede dar o 0 o 1, debido a que queremos averiguar
+				 * nuestro numero en base 2, tendremos que operar cualquier numero que queramos contra el modulo de 2.
+				 * Esto significa que los numeros impares por ejemplo el 3 van a tener un resto de 1, ya que 3 si intentamos 
+				 * dividirlo entre dos solo cabrian 2 y 1 quedaria fuera. Sin embargo cualquier numero par
+				 * seria posible dividirlo en 2 partes iguales dandonos un resto de 0.
+				 *
+				 * 
+				 * 1. hacemos el numero modulos 2 y el resultado lo almacenamos en el string
+				 * 2. dividimos el numero entre dos
+				 * 
+				 * Esto se repite hasta que nuestro numero quede a cero. Las operaciones quedarian asi:
+				 *   s+= numero%2;
+				 *   numero/=2;
+				 *   
+				 * Podemos usar la misma logica usando manipulación bit. 
+				 */
+				s += numero & 1;  
+				numero>>=1;// dividimos el numero por dos, o movemos los bits una posicion a la derecha
+			}
+			return s;
+	}
+
+	/**
+	 *  APARTADO 2: EJERCICIO 2.2(Alternativa 2) quizas demasiado complicada a parte de que no es muy eficiente
+	 *  Metodo que convierte un numero a un string en binario.
+	 */
+	public static String to_binary_string_bit_2(int numero) {
 		
 		//String con la representacion binaria de nuestro numero decimal
 		String s="";
@@ -214,35 +259,10 @@ public class AA_1 {
 		// Al final retornamos el string con la representacion binaria
 		return s;
 	}
+	
 
 	
 	
-	
-	/**
-	 * APARTADO 2: EJERCICIO 3
-	 * Se desea implementan una función en Java que reciba una lista y dos objetos o1 y o2.
-	 *  La función debe reemplazar todas las ocurrencias del objeto o1 por el objeto o2.
-	 *  1.Si el objeto o1 no se encuentra en la lista no se realizará ningún reemplazo.
-	 *  2.La lista, tras la llamada a la función, debe tener el mismo número de elementos 
-	 *  y en el mismo orden que originalmente: será exactamente igual salvo por los elementos reemplazados.
-	 *  3.Se trabajará con objetos (clase Object de Java). Para poder comparar los objetos de la lista y determinar si son iguales.
-	 *  4.La función debe trabajar exclusivamente con los métodos de la interfaz Lista.
-	 */
-	
-	public static void reemplazar(Lista lista, Object o1, Object o2) {
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 }
