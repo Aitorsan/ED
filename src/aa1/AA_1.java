@@ -10,7 +10,7 @@ import pilas.PilaEnlazada;
  * @author aitorSf
  */
 public class AA_1 {
-	
+
 
 	/**APARTADO 2: EJERCICIO 1: 
 	 * - función en Java que recibe una cola y retorna el valor más alto de los almacenados en la cola.

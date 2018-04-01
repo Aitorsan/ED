@@ -108,7 +108,7 @@ public class ListaEnlazada implements Lista{
 		
 	}
 
-/**Determina si la posicion actual es una poscion valid. De esta manera , se puede comprobar si se ha llegado 
+/**Determina si la posicion actual es una poscion valida. De esta manera , se puede comprobar si se ha llegado 
  * al final de la lsita
  */
 	@Override
@@ -144,7 +144,6 @@ public class ListaEnlazada implements Lista{
 		System.out.println();
 
 	}
-
 
 	
 

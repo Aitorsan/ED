@@ -3,10 +3,10 @@ package nodos;
 public class Nodo {
 
 	/**Elemento que contiene el nodo**/
-	private Object elemento;
+	protected Object elemento;
 	
 	/**Enlace al siguiente nodo**/
-	private Nodo enlace;
+	protected Nodo enlace;
 	
 	/**Constructor de la clase**/
 	public Nodo(Object elemento) {
