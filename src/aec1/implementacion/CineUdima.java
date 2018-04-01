@@ -72,25 +72,25 @@ public class CineUdima implements ICine {
 	      boolean borrado = false;
 		
 	      if(salida.buscar(cliente) ) {
-	    	      sacarClienteDeLista(salida,cliente.getNombre());
+	    	      sacarClienteDeLista(salida,cliente);
 	    	      borrado = true;
 		}else if( zonaEntrada.buscar(cliente)) {
-			  sacarClienteDeLista(zonaEntrada,cliente.getNombre());
+			  sacarClienteDeLista(zonaEntrada,cliente);
 			  borrado = true;
-		}else if (buscarClienteEnCola( taquillas_ventanilla_uno, cliente.getNombre()) ) {
-			sacarClienteDeCola(taquillas_ventanilla_uno,cliente.getNombre());
+		}else if (buscarClienteEnCola( taquillas_ventanilla_uno, cliente) ) {
+			sacarClienteDeCola(taquillas_ventanilla_uno,cliente);
 			borrado = true;
-		}else if(buscarClienteEnCola( taquillas_ventanilla_dos, cliente.getNombre()) ) {
-			sacarClienteDeCola(taquillas_ventanilla_dos,cliente.getNombre());
+		}else if(buscarClienteEnCola( taquillas_ventanilla_dos, cliente) ) {
+			sacarClienteDeCola(taquillas_ventanilla_dos,cliente);
 			borrado = true;
-		}else if (buscarClienteEnCola( comercio, cliente.getNombre()) ) {
-			sacarClienteDeCola(comercio,cliente.getNombre());
+		}else if (buscarClienteEnCola( comercio, cliente) ) {
+			sacarClienteDeCola(comercio,cliente);
 			borrado = true;
-		}else if(buscarClienteEnCola( control, cliente.getNombre()) ) {
-			sacarClienteDeCola(control,cliente.getNombre());
+		}else if(buscarClienteEnCola( control, cliente) ) {
+			sacarClienteDeCola(control,cliente);
 			borrado = true;
-		}else if(buscarClienteEnCola( control_prioritario, cliente.getNombre()))  {
-			sacarClienteDeCola(control_prioritario,cliente.getNombre());
+		}else if(buscarClienteEnCola( control_prioritario, cliente))  {
+			sacarClienteDeCola(control_prioritario,cliente);
 			borrado = true;
 		}
 		
@@ -147,19 +147,19 @@ public class CineUdima implements ICine {
 	}
 	
 	
-	public boolean buscarClienteEnCine(Cliente c) {
+	public boolean buscarClienteEnCine(Cliente cliente) {
 		
-		 if( buscarClienteEnLista(zonaEntrada,c)
-		 || buscarClienteEnLista(zonaProyeccion,c)
-		 || buscarClienteEnLista(salida,c)
-		 || buscarClienteEnCola(taquillas_ventanilla_uno,c.getNombre())
-		 || buscarClienteEnCola(taquillas_ventanilla_dos,c.getNombre())
-         || buscarClienteEnCola(comercio,c.getNombre())
-         || buscarClienteEnCola(control,c.getNombre())
-         || buscarClienteEnCola(control_prioritario,c.getNombre())
-         || buscarClienteEnCola(aseo_h,c.getNombre())
-         || buscarClienteEnCola(aseo_h,c.getNombre())
-         || buscarEnSalaCine(c))
+		 if( buscarClienteEnLista(zonaEntrada,cliente)
+		 || buscarClienteEnLista(zonaProyeccion,cliente)
+		 || buscarClienteEnLista(salida,cliente)
+		 || buscarClienteEnCola(taquillas_ventanilla_uno,cliente)
+		 || buscarClienteEnCola(taquillas_ventanilla_dos,cliente)
+         || buscarClienteEnCola(comercio,cliente)
+         || buscarClienteEnCola(control,cliente)
+         || buscarClienteEnCola(control_prioritario,cliente)
+         || buscarClienteEnCola(aseo_h,cliente)
+         || buscarClienteEnCola(aseo_h,cliente)
+         || buscarEnSalaCine(cliente))
 		 {
 			 return true;
 		 }
@@ -180,23 +180,27 @@ public class CineUdima implements ICine {
 	 * @param nombre
 	 * @return Cliente
 	 */
-	private Cliente sacarClienteDeLista(Lista l , String nombre) {
+	private Cliente sacarClienteDeLista(Lista lista , Cliente cliente) {
 		
-		   l.primero();
+		
+		//TODO:Not sure if it will work 
+		   lista.primero();
 		   boolean encontrado = false;
-		   Cliente c  = null;
-		   while(l.estaDentro() && !encontrado) {
-			   c = (Cliente)l.recuperar();
-			   if( c.getNombre().equals(nombre)) {   
+		   Cliente delCliente  = null;
+		   while(lista.estaDentro() && !encontrado) {
+			   delCliente = (Cliente)lista.recuperar();
+			   if(delCliente.getNombre().equals(cliente.getNombre())
+				&& delCliente.getPrimerApellido().equals(cliente.getPrimerApellido())
+			    && delCliente.getSegundoApellido().equals(cliente.getSegundoApellido())) {   
 				   encontrado = true;
-				   l.eliminar(c);
+				   lista.eliminar(delCliente);
 			   }else {
-				   c = null;
-				   l.avanzar();
+				   delCliente = null;
+				   lista.avanzar();
 			   }
 		   }
 		
-		   return c;
+		   return delCliente;
 	}
 	
 	/**
@@ -206,26 +210,29 @@ public class CineUdima implements ICine {
 	 * @param nombre
 	 * @return Cliente
 	 */
-	private Cliente sacarClienteDeCola(Cola c, String nombre) {
-
+	private Cliente sacarClienteDeCola(Cola cola, Cliente c) {
+        // cola auxiliar
 		Cola aux = new ColaEnlazada();
+		
 		Cliente cliente = null;
 
 		try {
-			while(!c.esVacia()) {
+			while(!cola.esVacia()) {
 
-				Cliente helper = (Cliente)c.primero();
+				Cliente temp = (Cliente)cola.primero();
 
-				if( helper.getNombre().equals(nombre)) {
-					cliente = helper;
-					c.quitarPrimero();
+				if( temp.getNombre().equals(cliente.getNombre())
+				    &&  temp.getPrimerApellido().equals(cliente.getPrimerApellido())
+				     && temp.getSegundoApellido().equals(cliente.getSegundoApellido())) {
+					cliente = temp;
+					cola.quitarPrimero();
 				}else {
-					aux.insertar(c.primero());
-					c.quitarPrimero();
+					aux.insertar(cola.primero());
+					cola.quitarPrimero();
 				}
 			}	
 			while( !aux.esVacia()) {
-				c.insertar(aux.primero());
+				cola.insertar(aux.primero());
 				aux.quitarPrimero();
 			}
 
@@ -245,24 +252,26 @@ public class CineUdima implements ICine {
  * @param nombre
  * @return
  */
-	public boolean buscarClienteEnCola( Cola c , String nombre) {
+	public boolean buscarClienteEnCola( Cola cola , Cliente cliente) {
 
 		boolean estaEnLaCola  = false;
 		Cola aux = new ColaEnlazada();
 
 		try {
-           //TODO:Modificar la busqueda en una cola
-			while( !c.esVacia()) {
+
+			while( !cola.esVacia()) {
 				
-				if( ((Cliente)c.primero()).getNombre().equals(nombre)) {
+				if( ((Cliente)cola.primero()).getNombre().equals(cliente.getNombre())
+						&& ((Cliente)cola.primero()).getPrimerApellido().equals(cliente.getPrimerApellido())
+						&& ((Cliente)cola.primero()).getSegundoApellido().equals(cliente.getSegundoApellido())) {
 					estaEnLaCola = true;
 				}
-				aux.insertar(c.primero());
-				c.quitarPrimero();
+				aux.insertar(cola.primero());
+				cola.quitarPrimero();
 			}
 			
 			while( !aux.esVacia()) {
-				c.insertar(aux.primero());
+				cola.insertar(aux.primero());
 				aux.quitarPrimero();
 			}
 		}catch(DesbordamientoInferior e) {
