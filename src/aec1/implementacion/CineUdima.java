@@ -8,6 +8,19 @@ import pilas.*;
 
 public class CineUdima implements ICine {
 
+	//flags
+	public static final char ENTRADA       = 0b00000001;
+	public static final char TAQUILLA_UNO  = 0b00000010;	
+	public static final char TAQUILLAS_DOS = 0b00000011;	
+	public static final char COMERCIO      = 0b00000100;	
+	public static final char CONTROL       = 0b00000101;
+	public static final char CONTROL_P     = 0b00000110 ;	
+	public static final char ASEOSM        = 0b00000111;	
+	public static final char ASEOSH        = 0b00001000;
+	public static final char SALA          = 0b00001001;	
+	public static final char SALIDA        = 0b00001010;	
+	public static final char LISTA_ZONA_PROYECCION = 0b00001011;
+
     // listas de las zonas
 	Lista zonaEntrada;
 	Lista zonaProyeccion;
@@ -55,12 +68,12 @@ public class CineUdima implements ICine {
 	 */
 	@Override
 	public void registarCliente(Cliente cliente) {
-		if(!zonaEntrada.estaDentro()) {
-			zonaEntrada.cero();
-		}
+	
            zonaEntrada.insertar(cliente);
 	}
 
+	
+	
 
 	/**
 	 * Si el cliente esta en la zona de Entrada, y decide irse 
@@ -374,4 +387,19 @@ public class CineUdima implements ICine {
 	}
 
 	
+	/**
+	 * Get lista entrada
+	 */
+	public Lista getListaZonaEntrada() {
+		return zonaEntrada;
+	}
+	
+	
+
+	/**
+	 * Get lista zonaproyeccion
+	 */
+	public Lista getListaListaZonaPoyeccion() {
+		return zonaProyeccion;
+	}
 }

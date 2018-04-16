@@ -58,8 +58,6 @@ public class Control_Handler {
 	public void infoClienteParaRegistrar(String s) {
 
 
-
-
 		//cine.registarCliente(cliente);
 
 	}
@@ -158,6 +156,9 @@ public class Control_Handler {
 						cine.registarCliente(nuevo);
 						JOptionPane.showMessageDialog(registerWindow, "El cliente ha sido registrado correctamente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 						registerWindow.resetFields();
+						//actualizar la cola
+					   window.actualizarInformacion( cine.getListaZonaEntrada(), CineUdima.ENTRADA);
+			
 					}
 
 

@@ -10,6 +10,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.SpringLayout;
+
+import aec1.implementacion.CineUdima;
+import aec1.implementacion.Cliente;
+import colas.Cola;
+import colas.ColaEnlazada;
+import excepciones.DesbordamientoInferior;
+import listas.Lista;
+import pilas.Pila;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
@@ -26,7 +35,7 @@ public class AppWindow extends JFrame{
 	private static final int SPACE_BETWEEN    = -5;
 	private static final int  BUTTOM_DISTANCE = -100;
 	private static final int UP_LABELS = 10;
-	
+
 	/* flags to set visible different frames*/
 	public static final int ZONA_PROYECCION_VISIBLE = 0;
 	public static final int ZONA_ENTRADA_VISIBLE    = 1;
@@ -57,18 +66,18 @@ public class AppWindow extends JFrame{
 
 	/*JToolbar*/
 	JToolBar toolbar;
-	
+
 	/*JButtons for the toolbar*/
 	JButton [] buttons;
-	
+
 	/*Scrollbar */
 	JScrollPane[] scroll;
-	
+
 	/*Jpanels */
 	JPanel panelAplicacion;
 	JPanel zona_Entrada;
 	JPanel zona_Proyeccion;
-	
+
 	/*JTextArea*/
 	JTextArea text_Entrada;
 	JTextArea text_Taquilla_uno;
@@ -83,8 +92,8 @@ public class AppWindow extends JFrame{
 	JTextArea text_Aseo_Mujeres;
 	JTextArea text_Sala_Proyeccion;
 	JTextArea text_Salida;
-	
-	
+
+
 	//JLables para lazona Entrada
 	JLabel l_zonaEntrada;
 	JLabel l_taquilla_uno;
@@ -92,36 +101,36 @@ public class AppWindow extends JFrame{
 	JLabel l_comercio;
 	JLabel l_control;
 	JLabel l_control_prioritario;
-	
+
 	//JLables para la zona Proyeccion
 	JLabel l_zonaProyeccion;
 	JLabel l_aseoHombre;
 	JLabel l_aseoMujer;
 	JLabel l_salaCine;
 	JLabel l_salida;
-	
+
 	//JButons zona Entrada
 	JButton mover_cliente_zonaEntrada;
 	JButton abandonar_cola_zonaEntrada;
 	JButton siguiente_taquilla_uno;
-    JButton siguiente_taquilla_dos;
-    JButton siguiente_comercio;
-    //este boton vale para las dos colas ya que cuando se atienda al siguiente solo se atendera 
-    //a la cola sin prioridad cuando la otra este vacia
-    JButton siguiente_control;
+	JButton siguiente_taquilla_dos;
+	JButton siguiente_comercio;
+	//este boton vale para las dos colas ya que cuando se atienda al siguiente solo se atendera 
+	//a la cola sin prioridad cuando la otra este vacia
+	JButton siguiente_control;
 
 	//JButtons zona Proyeccion
-	
-	//este boton tiene la misma funcion que el de la toolbar
-	  JButton mover_cliente;
-	//Si se decide abandonar una cola y no la entrada de cine se vuelve a la lista zona proyeccion
-	  JButton abandonar_cola;
-      JButton siguiente_aseo_H;
-      JButton siguiente_aseo_M;
-      JButton siguiente_salida;
-      JButton desapilar_sala;
 
-/**Constructor de la ventana principal*/
+	//este boton tiene la misma funcion que el de la toolbar
+	JButton mover_cliente;
+	//Si se decide abandonar una cola y no la entrada de cine se vuelve a la lista zona proyeccion
+	JButton abandonar_cola;
+	JButton siguiente_aseo_H;
+	JButton siguiente_aseo_M;
+	JButton siguiente_salida;
+	JButton desapilar_sala;
+
+	/**Constructor de la ventana principal*/
 	public AppWindow() {
 		super("Cine Udima");
 		initComponents();
@@ -134,7 +143,7 @@ public class AppWindow extends JFrame{
 
 	}
 
-    /**Metodo que inicializa todo los componentes del frame*/
+	/**Metodo que inicializa todo los componentes del frame*/
 	private void initComponents() {
 
 		// set the layout
@@ -175,11 +184,11 @@ public class AppWindow extends JFrame{
 		}
 		toolbar.setFloatable(false);
 
-		
+
 		/*-*******************************
 		 * Configuracion zona entrada
 		 ********************************/
-	
+
 		// Jpanel zona entrada
 		zona_Entrada = new JPanel(); 
 		SpringLayout spring_entrada= new SpringLayout(); 
@@ -187,66 +196,66 @@ public class AppWindow extends JFrame{
 		zona_Entrada.setBackground(Color.RED);
 		zona_Entrada.setVisible(true);
 
-		
+
 		//JButtons zona entrada
-		
-	    mover_cliente_zonaEntrada = new JButton("Mover Cliente");
+
+		mover_cliente_zonaEntrada = new JButton("Mover Cliente");
 		//Ventana de abandonar cola
-	    abandonar_cola_zonaEntrada = new JButton("Abandonar cola");
-	    siguiente_taquilla_uno=new JButton("siguiente 1");
-	    siguiente_taquilla_dos = new JButton("siguiente 2");
-	    siguiente_comercio = new JButton("Siguiente c.");
-	    siguiente_control = new JButton("Siguiente Control");
-	    
-	  //Poscionamiento de los Botones
-	      
-	    spring_entrada.putConstraint(SpringLayout.NORTH,mover_cliente_zonaEntrada,-100, SpringLayout.SOUTH,zona_Entrada);
-	    spring_entrada.putConstraint(SpringLayout.WEST, mover_cliente_zonaEntrada, 10, SpringLayout.WEST, zona_Entrada);
-	    
-	    spring_entrada.putConstraint(SpringLayout.NORTH,abandonar_cola_zonaEntrada,10, SpringLayout.SOUTH,mover_cliente_zonaEntrada);
-	    spring_entrada.putConstraint(SpringLayout.WEST, abandonar_cola_zonaEntrada, 8, SpringLayout.WEST, zona_Entrada);
-	    
-	    spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_taquilla_uno,-100, SpringLayout.SOUTH,zona_Entrada);
-	    spring_entrada.putConstraint(SpringLayout.WEST, siguiente_taquilla_uno, 20, SpringLayout.EAST, mover_cliente_zonaEntrada);
-	    
-	    spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_taquilla_dos,-100, SpringLayout.SOUTH,zona_Entrada);
-	    spring_entrada.putConstraint(SpringLayout.WEST, siguiente_taquilla_dos, 40, SpringLayout.EAST, siguiente_taquilla_uno);
-	    
-	    spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_comercio,-100, SpringLayout.SOUTH,zona_Entrada);
-	    spring_entrada.putConstraint(SpringLayout.WEST, siguiente_comercio, 30, SpringLayout.EAST, siguiente_taquilla_dos);
-	    
-	    spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_control,-100, SpringLayout.SOUTH,zona_Entrada);
-	    spring_entrada.putConstraint(SpringLayout.WEST, siguiente_control, 100, SpringLayout.EAST, siguiente_comercio);
-	    
+		abandonar_cola_zonaEntrada = new JButton("Abandonar cola");
+		siguiente_taquilla_uno=new JButton("siguiente 1");
+		siguiente_taquilla_dos = new JButton("siguiente 2");
+		siguiente_comercio = new JButton("Siguiente c.");
+		siguiente_control = new JButton("Siguiente Control");
+
+		//Poscionamiento de los Botones
+
+		spring_entrada.putConstraint(SpringLayout.NORTH,mover_cliente_zonaEntrada,-100, SpringLayout.SOUTH,zona_Entrada);
+		spring_entrada.putConstraint(SpringLayout.WEST, mover_cliente_zonaEntrada, 10, SpringLayout.WEST, zona_Entrada);
+
+		spring_entrada.putConstraint(SpringLayout.NORTH,abandonar_cola_zonaEntrada,10, SpringLayout.SOUTH,mover_cliente_zonaEntrada);
+		spring_entrada.putConstraint(SpringLayout.WEST, abandonar_cola_zonaEntrada, 8, SpringLayout.WEST, zona_Entrada);
+
+		spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_taquilla_uno,-100, SpringLayout.SOUTH,zona_Entrada);
+		spring_entrada.putConstraint(SpringLayout.WEST, siguiente_taquilla_uno, 20, SpringLayout.EAST, mover_cliente_zonaEntrada);
+
+		spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_taquilla_dos,-100, SpringLayout.SOUTH,zona_Entrada);
+		spring_entrada.putConstraint(SpringLayout.WEST, siguiente_taquilla_dos, 40, SpringLayout.EAST, siguiente_taquilla_uno);
+
+		spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_comercio,-100, SpringLayout.SOUTH,zona_Entrada);
+		spring_entrada.putConstraint(SpringLayout.WEST, siguiente_comercio, 30, SpringLayout.EAST, siguiente_taquilla_dos);
+
+		spring_entrada.putConstraint(SpringLayout.NORTH,siguiente_control,-100, SpringLayout.SOUTH,zona_Entrada);
+		spring_entrada.putConstraint(SpringLayout.WEST, siguiente_control, 100, SpringLayout.EAST, siguiente_comercio);
+
 		//JLables para lazona Entrada
-		 l_zonaEntrada = new JLabel("Lista Zona Entrada");
-		 l_taquilla_uno = new JLabel("Cola Taquilla 1");
-		 l_taquilla_dos = new JLabel("Cola Taquilla 2");
-		 l_comercio = new JLabel("Cola Comercio");
-		 l_control = new JLabel("Cola control");
-		 l_control_prioritario = new JLabel("Cola Control Prioritario");
-		
+		l_zonaEntrada = new JLabel("Lista Zona Entrada");
+		l_taquilla_uno = new JLabel("Cola Taquilla 1");
+		l_taquilla_dos = new JLabel("Cola Taquilla 2");
+		l_comercio = new JLabel("Cola Comercio");
+		l_control = new JLabel("Cola control");
+		l_control_prioritario = new JLabel("Cola Control Prioritario");
+
 		//Poscionamiento de los labels
-		
+
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_zonaEntrada, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_zonaEntrada, 20, SpringLayout.WEST, zona_Entrada);
-		
+
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_taquilla_uno, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_taquilla_uno, 30, SpringLayout.EAST, l_zonaEntrada);
-		
-		
+
+
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_taquilla_dos, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_taquilla_dos, 50, SpringLayout.EAST, l_taquilla_uno);
-		
+
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_comercio, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_comercio, 60, SpringLayout.EAST, l_taquilla_dos);
-		
+
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_control, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_control, 70, SpringLayout.EAST,  l_comercio);
-		
+
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_control_prioritario, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_control_prioritario, 54, SpringLayout.EAST,  l_control);
-		
+
 		//JTextArea zona entrada
 		text_Entrada = new JTextArea();
 		text_Taquilla_uno = new JTextArea();
@@ -300,12 +309,12 @@ public class AppWindow extends JFrame{
 		spring_entrada.putConstraint(SpringLayout.WEST,scroll[SCROLL_ENTRADA], APP_WIDTH-900,SpringLayout.WEST,zona_Entrada);
 
 
-	
+
 
 		/*-*******************************
 		 * Configuracion zona proyeccion
 		 ********************************/
-		
+
 		//Jpanel zona proyeccion
 		zona_Proyeccion = new JPanel();
 		SpringLayout spring_proyeccion = new SpringLayout();
@@ -316,65 +325,65 @@ public class AppWindow extends JFrame{
 		// JButtons zona proyeccon los cuales contienen la logica de movimiento
 		//TODO:getters
 		//TODO:Ventana con JComboBox para elegir que cola abandonar nueva clase
-		
-		  mover_cliente    = new JButton ("Mover cliente");
-		  abandonar_cola   = new JButton ("Abandonar cola");
-		  siguiente_aseo_H = new JButton ("siguiente H"); 
-	      siguiente_aseo_M = new JButton ("siguiente M"); 
-	      desapilar_sala   = new JButton ("Desapilar sala");
-	      siguiente_salida = new JButton ("Salir siguiente"); 
-	    
 
-	      //Posicionamiento de los botones
-	      spring_proyeccion.putConstraint(SpringLayout.NORTH,mover_cliente,-100, SpringLayout.SOUTH,zona_Proyeccion);
-	      spring_proyeccion.putConstraint(SpringLayout.WEST,mover_cliente,50, SpringLayout.WEST,zona_Proyeccion);
-	      
-	      spring_proyeccion.putConstraint(SpringLayout.NORTH,abandonar_cola,10, SpringLayout.SOUTH,mover_cliente);
-	      spring_proyeccion.putConstraint(SpringLayout.WEST,abandonar_cola,50, SpringLayout.WEST,zona_Proyeccion);
-	      
-	      
-	      spring_proyeccion.putConstraint(SpringLayout.NORTH,siguiente_aseo_H,-100, SpringLayout.SOUTH,zona_Proyeccion);
-	      spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_aseo_H,100, SpringLayout.EAST,mover_cliente);
-	      
-	      spring_proyeccion.putConstraint(SpringLayout.NORTH,siguiente_aseo_M,-100, SpringLayout.SOUTH,zona_Proyeccion);
-	      spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_aseo_M,30, SpringLayout.EAST,siguiente_aseo_H);
-	      
-	      spring_proyeccion.putConstraint(SpringLayout.NORTH,desapilar_sala,-100, SpringLayout.SOUTH,zona_Proyeccion);
-	      spring_proyeccion.putConstraint(SpringLayout.WEST,desapilar_sala,25, SpringLayout.EAST,siguiente_aseo_M);
-	      
-	      spring_proyeccion.putConstraint(SpringLayout.NORTH,siguiente_salida,-100, SpringLayout.SOUTH,zona_Proyeccion);
-	      spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_salida,25, SpringLayout.EAST,desapilar_sala);
-	      
-	      
-	      
+		mover_cliente    = new JButton ("Mover cliente");
+		abandonar_cola   = new JButton ("Abandonar cola");
+		siguiente_aseo_H = new JButton ("siguiente H"); 
+		siguiente_aseo_M = new JButton ("siguiente M"); 
+		desapilar_sala   = new JButton ("Desapilar sala");
+		siguiente_salida = new JButton ("Salir siguiente"); 
+
+
+		//Posicionamiento de los botones
+		spring_proyeccion.putConstraint(SpringLayout.NORTH,mover_cliente,-100, SpringLayout.SOUTH,zona_Proyeccion);
+		spring_proyeccion.putConstraint(SpringLayout.WEST,mover_cliente,50, SpringLayout.WEST,zona_Proyeccion);
+
+		spring_proyeccion.putConstraint(SpringLayout.NORTH,abandonar_cola,10, SpringLayout.SOUTH,mover_cliente);
+		spring_proyeccion.putConstraint(SpringLayout.WEST,abandonar_cola,50, SpringLayout.WEST,zona_Proyeccion);
+
+
+		spring_proyeccion.putConstraint(SpringLayout.NORTH,siguiente_aseo_H,-100, SpringLayout.SOUTH,zona_Proyeccion);
+		spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_aseo_H,100, SpringLayout.EAST,mover_cliente);
+
+		spring_proyeccion.putConstraint(SpringLayout.NORTH,siguiente_aseo_M,-100, SpringLayout.SOUTH,zona_Proyeccion);
+		spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_aseo_M,30, SpringLayout.EAST,siguiente_aseo_H);
+
+		spring_proyeccion.putConstraint(SpringLayout.NORTH,desapilar_sala,-100, SpringLayout.SOUTH,zona_Proyeccion);
+		spring_proyeccion.putConstraint(SpringLayout.WEST,desapilar_sala,25, SpringLayout.EAST,siguiente_aseo_M);
+
+		spring_proyeccion.putConstraint(SpringLayout.NORTH,siguiente_salida,-100, SpringLayout.SOUTH,zona_Proyeccion);
+		spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_salida,25, SpringLayout.EAST,desapilar_sala);
+
+
+
 		//JLables para la zona Proyeccion
 		l_zonaProyeccion = new JLabel ("Lista zona Proyeccion");
 		l_aseoHombre     = new JLabel ("Cola aseo caballero");
 		l_aseoMujer      = new JLabel ("Cola aseo señoras");
 		l_salaCine       = new JLabel ("Pila sala cine");
 		l_salida         = new JLabel ("Cola salida");
-		
+
 		//Posicionamiento JLabels zona Proyeccion
-		
+
 		spring_proyeccion.putConstraint(SpringLayout.NORTH,l_zonaProyeccion, UP_LABELS, SpringLayout.NORTH, zona_Proyeccion);
 		spring_proyeccion.putConstraint(SpringLayout.WEST, l_zonaProyeccion, 60, SpringLayout.WEST, zona_Proyeccion);
-		
-		
+
+
 		spring_proyeccion.putConstraint(SpringLayout.NORTH,l_aseoHombre, UP_LABELS, SpringLayout.NORTH, zona_Proyeccion);
 		spring_proyeccion.putConstraint(SpringLayout.WEST, l_aseoHombre, 70, SpringLayout.EAST, l_zonaProyeccion);
-		
+
 		spring_proyeccion.putConstraint(SpringLayout.NORTH,l_aseoMujer, UP_LABELS, SpringLayout.NORTH, zona_Proyeccion);
 		spring_proyeccion.putConstraint(SpringLayout.WEST, l_aseoMujer, 30, SpringLayout.EAST, l_aseoHombre);
-		
-		
-		
+
+
+
 		spring_proyeccion.putConstraint(SpringLayout.NORTH,l_salaCine, UP_LABELS, SpringLayout.NORTH, zona_Proyeccion);
 		spring_proyeccion.putConstraint(SpringLayout.WEST, l_salaCine, 30, SpringLayout.EAST, l_aseoMujer);
-		
+
 
 		spring_proyeccion.putConstraint(SpringLayout.NORTH,l_salida, UP_LABELS, SpringLayout.NORTH, zona_Proyeccion);
 		spring_proyeccion.putConstraint(SpringLayout.WEST, l_salida, 70, SpringLayout.EAST, l_salaCine);
-		
+
 		//JTextArea zona proyeccion
 		text_Proyeccion = new JTextArea();
 		text_Aseo_Caballero = new JTextArea();
@@ -421,7 +430,7 @@ public class AppWindow extends JFrame{
 		spring_proyeccion.putConstraint(SpringLayout.SOUTH,scroll[SCROLL_POYECCION ],BUTTOM_DISTANCE,SpringLayout.SOUTH,zona_Proyeccion);
 		spring_proyeccion.putConstraint(SpringLayout.WEST,scroll[SCROLL_POYECCION ], APP_WIDTH-850,SpringLayout.WEST,zona_Proyeccion);
 
- 
+
 		//Add JButtons de la zona de proyeccion
 		zona_Proyeccion.add(mover_cliente);
 		zona_Proyeccion.add(abandonar_cola);
@@ -429,24 +438,24 @@ public class AppWindow extends JFrame{
 		zona_Proyeccion.add(siguiente_aseo_M);
 		zona_Proyeccion.add(desapilar_sala );
 		zona_Proyeccion.add(siguiente_salida );
-		
-		
+
+
 		//Add JLables a la zona proyeccion
-     	zona_Proyeccion.add(l_zonaProyeccion);
-     	zona_Proyeccion.add(l_aseoHombre);
-      	zona_Proyeccion.add(l_aseoMujer);
-     	zona_Proyeccion.add(l_salaCine);
+		zona_Proyeccion.add(l_zonaProyeccion);
+		zona_Proyeccion.add(l_aseoHombre);
+		zona_Proyeccion.add(l_aseoMujer);
+		zona_Proyeccion.add(l_salaCine);
 		zona_Proyeccion.add(l_salida);
-		
+
 
 		//Add Componentes zona de proyeccion
 		zona_Proyeccion.add(scroll[10]);
 		zona_Proyeccion.add(scroll[9]);
-      	zona_Proyeccion.add(scroll[8]);
-     	zona_Proyeccion.add(scroll[7]);
+		zona_Proyeccion.add(scroll[8]);
+		zona_Proyeccion.add(scroll[7]);
 		zona_Proyeccion.add(scroll[6]);
-		
-		
+
+
 		//Add JButton zona entrada
 		zona_Entrada.add(mover_cliente_zonaEntrada);
 		zona_Entrada.add(abandonar_cola_zonaEntrada);
@@ -454,7 +463,7 @@ public class AppWindow extends JFrame{
 		zona_Entrada.add(siguiente_taquilla_dos);
 		zona_Entrada.add(siguiente_comercio);
 		zona_Entrada.add(siguiente_control);
-		
+
 		//Add JLables a la zona entrada
 		zona_Entrada.add(l_zonaEntrada );
 		zona_Entrada.add(l_taquilla_uno);
@@ -462,7 +471,7 @@ public class AppWindow extends JFrame{
 		zona_Entrada.add(l_comercio);
 		zona_Entrada.add(l_control);
 		zona_Entrada.add(l_control_prioritario);
-		
+
 		//Add Componentes zona entrada
 		zona_Entrada.add(scroll[5]);
 		zona_Entrada.add(scroll[4]);
@@ -470,7 +479,7 @@ public class AppWindow extends JFrame{
 		zona_Entrada.add(scroll[2]);
 		zona_Entrada.add(scroll[1]);
 		zona_Entrada.add(scroll[0]);
-	
+
 
 
 		//Add componentes to the main frame
@@ -481,7 +490,7 @@ public class AppWindow extends JFrame{
 		add(panelAplicacion,BorderLayout.CENTER);
 	}
 
-    /**
+	/**
 	 * @return the mover_cliente_zonaEntrada
 	 */
 	public JButton getMover_cliente_zonaEntrada_boton() {
@@ -566,9 +575,9 @@ public class AppWindow extends JFrame{
 	}
 
 	/**
-     * Retorna todos los botones del tool bar de la ventana principal, en un array
-     * @return
-     */
+	 * Retorna todos los botones del tool bar de la ventana principal, en un array
+	 * @return
+	 */
 	public JButton[] getButtonsToolBar() {
 		return buttons;
 	}
@@ -595,18 +604,136 @@ public class AppWindow extends JFrame{
 	 * Actualiza la informacion de la zona de proyeccion
 	 * @param info
 	 */
-	public void sendInformationZonaProyeccion(String info) {
+	public void actualizarInformacion(Cola cola ,char flag ) {
 
-		text_Proyeccion.setText(info);
+		//		
+		//		//JTextArea zona entrada
+		//		text_Entrada = new JTextArea();
+		//		
+		//		//JTextArea zona proyeccion
+		//		text_Proyeccion = new JTextArea();
+		//		text_Sala_Proyeccion= new JTextArea();
+		//		text_Salida= new JTextArea();
+		//	      
+		//Iterar en los contenedores y copiar la info a un string
+		String info = getInfoCola(cola);	
+
+		switch(flag) {
+
+		case CineUdima.CONTROL:
+			text_Cola_Control.setText(info);
+			break;
+		case CineUdima.CONTROL_P:
+			text_Cola_Control_Prioritario.setText(info);
+			break;
+		case CineUdima.TAQUILLA_UNO:
+			text_Taquilla_uno.setText(info);
+			break;
+		case CineUdima.TAQUILLAS_DOS:
+			text_Taquilla_dos.setText(info);
+			break;
+		case CineUdima.ASEOSH:
+			text_Aseo_Caballero.setText(info);
+			break;
+		case CineUdima.ASEOSM:
+			text_Aseo_Mujeres.setText(info);
+			break;
+		case CineUdima.COMERCIO:
+
+			text_Cola_Comercio.setText(info);
+
+			break;
+		}
+	}
+	public void actualizarInformacion(Lista lista,char flag) {
+
+		//		
+		//		JTextArea zona proyeccion
+		//		text_Proyeccion = new JTextArea();
+		//		text_Sala_Proyeccion= new JTextArea();
+		//		text_Salida= new JTextArea();
+
+		String info = getInfoLista(lista);
+
+		if( (CineUdima.ENTRADA & flag )!= 0) {
+			
+			text_Entrada.setText(info);
+		}
+		if((CineUdima.LISTA_ZONA_PROYECCION&flag) != 0){
+			
+			text_Proyeccion.setText(info);
+
+		}
+		
+	      if((CineUdima.SALIDA&flag) != 0){
+			
+			text_Proyeccion.setText(info);
+
+		}
+
+	}
+
+	public void actualizarInformacion(Pila pila,char flag) {
+		//		
+		//		//JTextArea zona entrada
+		//		text_Entrada = new JTextArea();
+		//		
+		//		//JTextArea zona proyeccion
+		//		text_Proyeccion = new JTextArea();
+		//		text_Sala_Proyeccion= new JTextArea();
+		//		text_Salida= new JTextArea();
+		//	      
 	}
 
 
 
 	/**
-	 * Actualiza la informacion de la zona de la entrada
-	 * @param info
+	 * Funcion auxiliar para recoger la información de una cola
 	 */
-	public void sendInformationZonaEntrada(String info) {
-		text_Entrada.setText(info);
+
+	private String getInfoCola(Cola c) {
+		//TODO: 
+		String info = "";
+		Cola colaAuxi = new ColaEnlazada();
+		try {
+			while(!c.esVacia()) {
+
+
+				info+= ((Cliente)c.primero()).getNombre();
+				colaAuxi.insertar(c.primero());
+				c.quitarPrimero();
+
+			}
+			while(!colaAuxi.esVacia()) {
+
+				c.insertar(colaAuxi.primero());
+				colaAuxi.quitarPrimero();
+
+			}
+
+		} catch (DesbordamientoInferior e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return info;
+	}
+	
+	
+	
+	/**
+	 * Funcion auxiliar para recoger informacion de una lista
+	 */
+	private String getInfoLista(Lista lista) {
+		
+	         lista.primero();
+	         String info = "";
+	         while(lista.estaDentro()) {
+	        	       info+=((Cliente)lista.recuperar()).getNombre();
+	        	       info+="\n";
+	        	       lista.avanzar();
+	         }
+		    lista.primero();
+		
+		return info;
 	}
 }
