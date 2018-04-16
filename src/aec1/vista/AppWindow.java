@@ -699,7 +699,7 @@ public class AppWindow extends JFrame{
 			while(!c.esVacia()) {
 
 
-				info+= ((Cliente)c.primero()).getNombre();
+				info+= ((Cliente)c.primero()).getNombre()+"\n";
 				colaAuxi.insertar(c.primero());
 				c.quitarPrimero();
 
