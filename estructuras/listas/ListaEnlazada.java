@@ -25,9 +25,21 @@ public class ListaEnlazada implements Lista{
 	@Override
 	public void insertar(Object elemento) {
 		//Se crea un nodo y el enlace con el siguiente nodo actual
-		Nodo nuevo = new Nodo(elemento);
-		
-		nuevo.setEnlace(actual.getEnlace());
+		Nodo nuevo = new Nodo(elemento);       
+		// 1. actual apunta a la cabecera
+	  
+         if( !estaDentro()){
+        	  Nodo nodoIterador = cabecera;
+              while(nodoIterador.getEnlace() != actual) {
+             	   nodoIterador = nodoIterador.getEnlace();
+              }
+              actual = nodoIterador;
+         }
+         
+	  
+	                         
+		//if(estaDentro) actual no es gual a null                                   
+		nuevo.setEnlace(actual.getEnlace());    
 		
 		//Se actualiza el enlace del nodo actual
 		actual.setEnlace(nuevo);
@@ -49,6 +61,7 @@ public class ListaEnlazada implements Lista{
 		 *que se quiere eliminar
 		 */
 		if(nodoIterador.getEnlace() != null) {
+			actual = nodoIterador;
 			nodoIterador.setEnlace(nodoIterador.getEnlace().getEnlace());
 		}
 		
@@ -102,7 +115,7 @@ public class ListaEnlazada implements Lista{
 		if( estaDentro()) {
 			actual = actual.getEnlace();
 		}else {
-			System.out.println("No se puede avanzar laposcion atual por que no esta dentro de la lista");
+			System.out.println("No se puede avanzar la poscion atual por que no esta dentro de la lista");
 			
 		}
 		

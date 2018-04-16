@@ -145,9 +145,9 @@ public class Control_Handler {
 
 					Cliente nuevo = new Cliente();
 
-					nuevo.setNombre(token.nextToken());
-					nuevo.setPrimerApellido(token.nextToken());
-					nuevo.setSegundoApellido(token.nextToken());
+					nuevo.setNombre(token.nextToken().toLowerCase());
+					nuevo.setPrimerApellido(token.nextToken().toLowerCase());
+					nuevo.setSegundoApellido(token.nextToken().toLowerCase());
 					nuevo.setEdad(Integer.valueOf(token.nextToken()));
 					nuevo.setSexo(token.nextToken());
 					nuevo.setPrioridad(token.nextToken());
