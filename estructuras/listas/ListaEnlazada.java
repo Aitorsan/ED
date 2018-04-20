@@ -62,7 +62,10 @@ public class ListaEnlazada implements Lista{
 		 */
 		if(nodoIterador.getEnlace() != null) {
 			actual = nodoIterador;
-			nodoIterador.setEnlace(nodoIterador.getEnlace().getEnlace());
+			nodoIterador = nodoIterador.getEnlace();
+	//TODO:		
+			actual.setEnlace(actual.getEnlace().getEnlace());
+		     nodoIterador.setEnlace(null);
 		}
 		
 	}

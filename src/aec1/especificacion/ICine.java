@@ -12,9 +12,5 @@ public interface ICine {
     /**Mover el cliente a la zona de proyeccion, si tiene entrada**/
     public void moverClienteSalaPoyeccion(Cliente cliente);
     
-    /**Recoge la informacion de la Zona de enrada**/
-    public String getListInfoEntrada();
-     
-    /**Recoge la informacion de la Zona de Proyeccion*/
-    public String getListInfoProyeccion();
+
 }

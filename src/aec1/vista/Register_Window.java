@@ -73,7 +73,7 @@ public class Register_Window extends JDialog {
 		
 		/* Mascara para la edad*/
 		try {
-			mascaraEdad = new MaskFormatter("##");//suponemos que nadie tiene 100 años o mas
+			mascaraEdad = new MaskFormatter("##");//well we assume there is nobody 100 years old or more
 		
 			edad = new JFormattedTextField(mascaraEdad);
 			edad.setColumns(TEXT_EDAD_WIDTH);

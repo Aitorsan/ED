@@ -1,5 +1,7 @@
 package aec1.implementacion;
 
+import java.util.StringTokenizer;
+
 import aec1.especificacion.ICine;
 import listas.*;
 import colas.*;
@@ -11,7 +13,7 @@ public class CineUdima implements ICine {
 	//flags
 	public static final char ENTRADA       = 0b00000001;
 	public static final char TAQUILLA_UNO  = 0b00000010;	
-	public static final char TAQUILLAS_DOS = 0b00000011;	
+	public static final char TAQUILLA_DOS = 0b00000011;	
 	public static final char COMERCIO      = 0b00000100;	
 	public static final char CONTROL       = 0b00000101;
 	public static final char CONTROL_P     = 0b00000110 ;	
@@ -20,6 +22,7 @@ public class CineUdima implements ICine {
 	public static final char SALA          = 0b00001001;	
 	public static final char SALIDA        = 0b00001010;	
 	public static final char LISTA_ZONA_PROYECCION = 0b00001011;
+	public static final char ALL           = 0b00001111;
 
     // listas de las zonas
 	Lista zonaEntrada;
@@ -90,19 +93,19 @@ public class CineUdima implements ICine {
 		}else if( zonaEntrada.buscar(cliente)) {
 			  sacarClienteDeLista(zonaEntrada,cliente);
 			  borrado = true;
-		}else if (buscarClienteEnCola( taquillas_ventanilla_uno, cliente) ) {
+		}else if (isTheSame( taquillas_ventanilla_uno, cliente) ) {
 			sacarClienteDeCola(taquillas_ventanilla_uno,cliente);
 			borrado = true;
-		}else if(buscarClienteEnCola( taquillas_ventanilla_dos, cliente) ) {
+		}else if(isTheSame( taquillas_ventanilla_dos, cliente) ) {
 			sacarClienteDeCola(taquillas_ventanilla_dos,cliente);
 			borrado = true;
-		}else if (buscarClienteEnCola( comercio, cliente) ) {
+		}else if (isTheSame( comercio, cliente) ) {
 			sacarClienteDeCola(comercio,cliente);
 			borrado = true;
-		}else if(buscarClienteEnCola( control, cliente) ) {
+		}else if(isTheSame( control, cliente) ) {
 			sacarClienteDeCola(control,cliente);
 			borrado = true;
-		}else if(buscarClienteEnCola( control_prioritario, cliente))  {
+		}else if(isTheSame( control_prioritario, cliente))  {
 			sacarClienteDeCola(control_prioritario,cliente);
 			borrado = true;
 		}
@@ -117,76 +120,222 @@ public class CineUdima implements ICine {
    
 	}
 	
+
 	
-	public String getListInfoEntrada() {
-		String info="";
-		
-		
-		//1 lista entrada
-		zonaEntrada.primero();
-		while(zonaEntrada.estaDentro()) {
-			info+= ((Cliente)zonaEntrada.recuperar()).getNombre();
-			info+="\n";
-		    zonaEntrada.avanzar();
-		}
-		
-		//3 cola Taquilla_uno
-		  info+=getInfoCola(taquillas_ventanilla_uno);
-		
-		
-		return info;
-	}
-	
-	
-	/**Recoger la informacion de la cola de Proyeccion**/
-	
-	public String getListInfoProyeccion() {
-		String info="";
-		
-		//1.Lista sala proyeccion
-		zonaProyeccion.primero();
-		while(zonaProyeccion.estaDentro()) {
-			info+= zonaProyeccion.recuperar();
-		    zonaProyeccion.avanzar();
-		}
-		//2.Aseos señora
-		//3.Aseos caballero
-		//4.Pila sala proyeccion
-		//5.Lista salida
-	    
-		
-		
-		return info;
-	}
-	
-	
+
+	/**
+	 * Buscar un cliente en el cine
+	 * @param cliente
+	 * @return
+	 */
 	public boolean buscarClienteEnCine(Cliente cliente) {
 		
-		 if( buscarClienteEnLista(zonaEntrada,cliente)
-		 || buscarClienteEnLista(zonaProyeccion,cliente)
-		 || buscarClienteEnLista(salida,cliente)
-		 || buscarClienteEnCola(taquillas_ventanilla_uno,cliente)
-		 || buscarClienteEnCola(taquillas_ventanilla_dos,cliente)
-         || buscarClienteEnCola(comercio,cliente)
-         || buscarClienteEnCola(control,cliente)
-         || buscarClienteEnCola(control_prioritario,cliente)
-         || buscarClienteEnCola(aseo_h,cliente)
-         || buscarClienteEnCola(aseo_h,cliente)
+		 if( isTheSame(zonaEntrada,cliente)
+		 || isTheSame(zonaProyeccion,cliente)
+		 || isTheSame(salida,cliente)
+		 || isTheSame(taquillas_ventanilla_uno,cliente)
+		 || isTheSame(taquillas_ventanilla_dos,cliente)
+         || isTheSame(comercio,cliente)
+         || isTheSame(control,cliente)
+         || isTheSame(control_prioritario,cliente)
+         || isTheSame(aseo_h,cliente)
+         || isTheSame(aseo_h,cliente)
          || buscarEnSalaCine(cliente))
 		 {
 			 return true;
 		 }
 		
-
 		 return false;
-
-		  
              
 	}
+	
+	
+	//TODO ASDFASFASFDASDFA
+	public Cliente buscarClienteEnCine(String nameSurname) {
+	
+
+		    Cliente client = search( zonaEntrada,nameSurname);
+
+		if( client == null) 
+			client =search( zonaProyeccion,nameSurname);
+
+
+		if( client == null) 
+			client = search( taquillas_ventanilla_uno,nameSurname);
+
+		if( client == null) 
+			client = search( taquillas_ventanilla_dos,nameSurname);
+
+
+		if( client == null) 
+			client =  search( comercio,nameSurname);
+
+		if( client == null) 
+			client =  search( control,nameSurname);
+
+		if( client == null) 
+			client =  search( control_prioritario,nameSurname);
+
+		if( client == null) 
+			client = search( salida, nameSurname);
+
+
+			  	   
+		 return client;
+	}
+	
+	
+	  public void move( Cliente c , String where)throws Exception {
+		if( c != null) {
+			 if( where.equals("Lista Entrada")&& !isTheSame(zonaEntrada,c)) {
+				
+				  zonaEntrada.insertar(c);
+			  }
+			  else if( where.equals("Taquilla 1") && !isTheSame(taquillas_ventanilla_uno,c)) {
+				  taquillas_ventanilla_uno.insertar(c);
+			  }
+			  else if( where.equals("Taquilla 2") && !isTheSame(taquillas_ventanilla_dos,c)) {
+				  taquillas_ventanilla_dos.insertar(c);
+			  }
+			  else if( where.equals("Comercio")&&  !isTheSame(comercio,c)) {
+				  comercio.insertar(c);
+			  }
+			  else if( where.equals("Control prioritario")&& !isTheSame(control_prioritario,c)) {
+				  if( c.prioritario()) {
+	                 
+					  control_prioritario.insertar(c);
+				  }else {
+					  control.insertar(c);
+					  throw new Exception("El cliente no es prioritario");
+					  
+				  }
+				  
+				 
+			  }
+			  else if( where.equals( "Control") && !isTheSame(control,c)){
+				  if(c.prioritario()) {
+					  control_prioritario.insertar(c);
+					  throw new Exception("El cliente debe ir a la cola prioritaria");
+				  }
+				  control.insertar(c);
+			  }
+		}
+		 
+		 
+		  
+		  //ampliar para la sala de proyeccion
+		  
+	  }
+	 /**
+	    * Search for a client on the list, with a given name and surname
+	    * @param l
+	    * @param name
+	    * @return
+	    */
+	   private Cliente search(Lista l , String nameAndSurname) {
+		   StringTokenizer str = new StringTokenizer(nameAndSurname);
+		   String name = str.nextToken();
+		   String surname = str.nextToken();
+		   String secondSurname = str.nextToken();
+		   l.primero();
+		    Cliente moved_client = null;
+		  boolean found = false;
+		   while(l.estaDentro()&&!found) {
+			   
+			   if( name.equals(((Cliente)l.recuperar()).getNombre())
+					   &&surname.equals(((Cliente)l.recuperar()).getPrimerApellido())
+					   &&secondSurname.equals(((Cliente)l.recuperar()).getSegundoApellido())) {
+				   moved_client = (Cliente)l.recuperar();
+				   l.eliminar(l.recuperar());
+				 found = true;
+			   }
+			   l.avanzar();
+			   
+		   }
+		   l.primero();
+		   return moved_client;
+	   }
+	
+	
+	   /**
+	    * Find and delete a client from the queue
+	    * @param c
+	    * @param name
+	    * @return true if the client was found 
+	    */
+	   private Cliente search(Cola c , String nameAndSurname) {
+		   StringTokenizer str = new StringTokenizer(nameAndSurname);
+		   String name = str.nextToken();
+		   String surname = str.nextToken();
+		   String secondSurname = str.nextToken();
+		  Cliente client = null;
+		   Cola auxiliar = new ColaEnlazada();
+		
+		   try {
+			   while(!c.esVacia() ) {
+				   
+				   if( name.equals(((Cliente)c.primero()).getNombre())
+						   &&surname.equals(((Cliente)c.primero()).getPrimerApellido())
+						   &&secondSurname.equals(((Cliente)c.primero()).getSegundoApellido())) {
+					   client = (Cliente)c.primero();
+					   c.quitarPrimero();
+					
+				   }else {
+					   auxiliar.insertar(c.primero());
+	                   c.quitarPrimero();	 
+				   }
+						   
+			   }
+			   while(!auxiliar.esVacia()) {
+				   c.insertar(auxiliar.primero());
+				   auxiliar.quitarPrimero();
+			   }
+			   
+		   }catch(DesbordamientoInferior e) {
+			   //TODO:
+		   }
+		
+		   return client;
+		   
+	   }
 	/*-*********************************************************
 	 * Funciones auxiliares para ayudar en ciertas tareas 
 	 ***********************************************************/
 	
+	public Lista getZonaEntrada() {
+		return zonaEntrada;
+	}
+	public Lista getZonaProyeccion() {
+		return zonaProyeccion;
+	}
+	public Cola getTaquillas_ventanilla_uno() {
+		return taquillas_ventanilla_uno;
+	}
+	public Cola getTaquillas_ventanilla_dos() {
+		return taquillas_ventanilla_dos;
+	}
+	public Cola getControl_prioritario() {
+		return control_prioritario;
+	}
+	public Pila getSala_proyeccion() {
+		return sala_proyeccion;
+	}
+	public Lista getSalida() {
+		return salida;
+	}
+	
+	public Cola getComercio() {
+		return comercio;
+	}
+	public Cola getControl() {
+		return control;
+	}
+	public Cola getAseo_m() {
+		return aseo_m;
+	}
+	public Cola getAseo_h() {
+		return aseo_h;
+	}
 	/**
 	 * Busca un cliente en una lista dada y lo retorna
 	 * @param l
@@ -265,7 +414,7 @@ public class CineUdima implements ICine {
  * @param nombre
  * @return
  */
-	public boolean buscarClienteEnCola( Cola cola , Cliente cliente) {
+	public boolean isTheSame( Cola cola , Cliente cliente) {
 
 		boolean estaEnLaCola  = false;
 		Cola aux = new ColaEnlazada();
@@ -297,44 +446,17 @@ public class CineUdima implements ICine {
 	}
 
 	
-	/**Retorna la informacion que se encuentra en una cola**/
-	private String getInfoCola(Cola c) {
-		Cola aux = new ColaEnlazada();
-		String data ="";
-		try {
-		
-			while( !c.esVacia()) {
-			    data+=c.primero();
-			    data+="\n";
-				aux.insertar(c.primero());
-				c.quitarPrimero();
-			}
-				
-			while( !aux.esVacia()) {
-					
-				c.insertar(aux.primero());	
-				aux.quitarPrimero();
-			}
-			} catch (DesbordamientoInferior e) {
-				// TODO Auto-generated catch block handle the exception properly
-				System.out.println(e.getMessage());
-			}
-			
-		
-		return data;
-	}
 	
 	/**Busca un cliente en una lista dada**/
-	private boolean buscarClienteEnLista(Lista l,Cliente cliente) {
+	private boolean isTheSame(Lista l,Cliente cliente) {
 		
 		boolean encontrado = false;
 		
 		l.primero();
 		
 	    	 while(l.estaDentro()) {
-	    		   
-	    		 Cliente aux =(Cliente) l.recuperar();   		 
-	    	     
+	    		    		 
+	    	     Cliente aux = (Cliente)l.recuperar();
 	    		 if(aux.getNombre().equals(cliente.getNombre()) && aux.getPrimerApellido().equals(cliente.getPrimerApellido())
 	    			 && aux.getSegundoApellido().equals(cliente.getSegundoApellido())){	     
 	    	    	 
@@ -386,20 +508,102 @@ public class CineUdima implements ICine {
 		
 	}
 
-	
 	/**
-	 * Get lista entrada
-	 */
-	public Lista getListaZonaEntrada() {
-		return zonaEntrada;
-	}
+	 * Buscar cliente por nombre
+	 */ 
+	   public boolean deleteClient(String nameSurname) {
+		   
+		  boolean borrado = false;
+		  if(searchAndDelete(zonaEntrada,nameSurname)
+		  || searchAndDelete( zonaProyeccion,nameSurname)
+		  || searchAndDelete(taquillas_ventanilla_uno,nameSurname)
+		  || searchAndDelete( taquillas_ventanilla_dos,nameSurname)
+		  || searchAndDelete(comercio,nameSurname)
+		  || searchAndDelete( control,nameSurname)
+		  || searchAndDelete(control_prioritario,nameSurname)
+		  || searchAndDelete(salida, nameSurname)){
+			  borrado = true;
+		  }
+		   
+		   return borrado;
+	   }
+	   
+	   /**
+	    * Find and delete a client from the queue
+	    * @param c
+	    * @param name
+	    * @return true if the client was found 
+	    */
+	   private boolean searchAndDelete(Cola c , String nameAndSurname) {
+		   StringTokenizer str = new StringTokenizer(nameAndSurname);
+		   String name="";
+		   String surname="" ;
+		   String secondSurname="";
+		   if(str.hasMoreTokens())
+		      name = str.nextToken();
+		   if(str.hasMoreTokens())
+		       surname = str.nextToken();
+		   if(str.hasMoreTokens())
+		       secondSurname = str.nextToken();
+		  
+		   Cola auxiliar = new ColaEnlazada();
+		   boolean borrado = false;
+		   try {
+			   while(!c.esVacia() ) {
+				   
+				   if( name.equals(((Cliente)c.primero()).getNombre())
+						   &&surname.equals(((Cliente)c.primero()).getPrimerApellido())
+						   &&secondSurname.equals(((Cliente)c.primero()).getSegundoApellido())) {
+					   c.quitarPrimero();
+					   borrado = true;
+				   }else {
+					   auxiliar.insertar(c.primero());
+	                   auxiliar.quitarPrimero();
+				   }
+								   
+			   }
+			   while(!auxiliar.esVacia()) {
+				   c.insertar(auxiliar.primero());
+				   auxiliar.quitarPrimero();
+			   }
+			   
+		   }catch(DesbordamientoInferior e) {
+			   //TODO:
+		   }
+		
+		   return borrado;
+		   
+	   }
+	   
+	   /**
+	    * Delete a client from a list
+	    * @param l
+	    * @param name
+	    * @return
+	    */
+	   private boolean searchAndDelete(Lista l , String nameAndSurname) {
+		   StringTokenizer str = new StringTokenizer(nameAndSurname);
+		   String name = str.nextToken();
+		   String surname = str.nextToken();
+		   String secondSurname = str.nextToken();
+		   l.primero();
+		   boolean borrado = false;
+		   while(l.estaDentro()) {
+			   
+			   if( name.equals(((Cliente)l.recuperar()).getNombre())
+					   &&surname.equals(((Cliente)l.recuperar()).getPrimerApellido())
+					   &&secondSurname.equals(((Cliente)l.recuperar()).getSegundoApellido())) {
+				   l.eliminar(l.recuperar());
+				   borrado = true;
+			   }
+			   l.avanzar();
+			   
+		   }
+		   l.primero();
+		   return borrado;
+	   }
 	
 	
 
-	/**
-	 * Get lista zonaproyeccion
-	 */
-	public Lista getListaListaZonaPoyeccion() {
-		return zonaProyeccion;
-	}
+
 }
