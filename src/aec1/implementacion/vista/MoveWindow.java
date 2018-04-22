@@ -1,4 +1,4 @@
-package aec1.vista;
+package aec1.implementacion.vista;
 
 import javax.swing.JComboBox;
 

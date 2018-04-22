@@ -146,6 +146,36 @@ public class CineUdima implements ICine {
 		 return client;
 	}
 	
+	
+	/**
+	 * Search for a client within the cinema 
+	 * @param nameSurname
+	 * @return If a client is found return that client object
+	 */
+	public Cliente buscarClienteEnCineDesdeEntrada(String nameSurname) {
+	
+
+		    Cliente client = search( zonaEntrada,nameSurname);
+			
+		if( client == null) 
+			client = search( taquillas_ventanilla_uno,nameSurname);
+
+		if( client == null) 
+			client = search( taquillas_ventanilla_dos,nameSurname);
+
+		if( client == null) 
+			client =  search( comercio,nameSurname);
+
+		if( client == null) 
+			client =  search( control,nameSurname);
+
+		if( client == null) 
+			client =  search( control_prioritario,nameSurname);
+
+			  	   
+		 return client;
+	}
+	
 	/**
 	 * Moves a client from one place to another if that client exist.
 	 * @param c

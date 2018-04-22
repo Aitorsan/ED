@@ -1,4 +1,4 @@
-package aec1.vista;
+package aec1.implementacion.vista;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;

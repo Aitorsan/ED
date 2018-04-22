@@ -1,4 +1,4 @@
-package aec1.vista;
+package aec1.implementacion.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -181,7 +181,7 @@ public class AppWindow extends JFrame{
 		buttons[ZONA_ENTRADA].setText("Zona-Entrada");
 		buttons[ZONA_PROYECCION].setText("Zona-Proyeccion");
 
-		//toolbar
+		//JToolBar
 		toolbar = new JToolBar();
 		for( int i = 0 ; i < buttons.length;++i) {	
 			toolbar.add(buttons[i]);
@@ -201,7 +201,6 @@ public class AppWindow extends JFrame{
 
 
 		//Entry area JButtons
-
 		abandonar_cola_zonaEntrada = new JButton("Mover/Abandonar cola");
 		siguiente_taquilla_uno=new JButton("siguiente 1");
 		siguiente_taquilla_dos = new JButton("siguiente 2");
@@ -209,7 +208,6 @@ public class AppWindow extends JFrame{
 		siguiente_control = new JButton("Siguiente Control");
 
 		//JButtons positioning
-
 		spring_entrada.putConstraint(SpringLayout.NORTH,abandonar_cola_zonaEntrada,-100, SpringLayout.SOUTH,zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, abandonar_cola_zonaEntrada, 10, SpringLayout.WEST, zona_Entrada);
 
@@ -242,7 +240,6 @@ public class AppWindow extends JFrame{
 		l_control_prioritario.setForeground(Color.WHITE);
 
 		//JLabels positioning
-
 		spring_entrada.putConstraint(SpringLayout.NORTH,l_zonaEntrada, UP_LABELS, SpringLayout.NORTH, zona_Entrada);
 		spring_entrada.putConstraint(SpringLayout.WEST, l_zonaEntrada, 20, SpringLayout.WEST, zona_Entrada);
 
@@ -353,7 +350,6 @@ public class AppWindow extends JFrame{
 		spring_proyeccion.putConstraint(SpringLayout.WEST,siguiente_salida,25, SpringLayout.EAST,desapilar_sala);
 
 
-
 		//Projection area JLabels
 		l_zonaProyeccion = new JLabel ("Lista zona Proyeccion");
 		l_aseoHombre     = new JLabel ("Cola aseo caballero");
@@ -392,14 +388,12 @@ public class AppWindow extends JFrame{
 		text_Sala_Proyeccion= new JTextArea();
 		text_Salida= new JTextArea();
 
-
 		//Projection area JScrollBars
 		scroll[SCROLL_POYECCION ] = new JScrollPane(text_Proyeccion ,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll[SCROLL_ASEOS_H]= new JScrollPane(text_Aseo_Caballero,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll[SCROLL_ASEOS_M]= new JScrollPane(text_Aseo_Mujeres,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll[SCROLL_SALA ]= new JScrollPane(text_Sala_Proyeccion,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll[ SCROLL_SALIDA]= new JScrollPane(text_Salida,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
 
 		// Scrollbar positioning and them elements
 		spring_proyeccion.putConstraint(SpringLayout.NORTH,scroll[SCROLL_SALIDA], UP_DISTANCE,SpringLayout.NORTH,zona_Proyeccion);

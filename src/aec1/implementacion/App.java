@@ -1,5 +1,5 @@
-package aec1;
-import aec1.control.*;
+package aec1.implementacion;
+import aec1.implementacion.control.*;
 public class App {
 /**
  * Main method to run the application

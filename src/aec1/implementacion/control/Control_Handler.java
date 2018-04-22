@@ -1,4 +1,4 @@
-package aec1.control;
+package aec1.implementacion.control;
 /*Java core imports*/
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,16 +8,15 @@ import java.util.StringTokenizer;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-/*project imports*/
-import aec1.vista.AppWindow;
-import aec1.vista.Register_Window;
 import colas.Cola;
 import excepciones.DesbordamientoInferior;
 import pilas.Pila;
 import aec1.implementacion.CineUdima;
 import aec1.implementacion.Cliente;
-import aec1.vista.AuxiliarWindow;
-import aec1.vista.MoveWindow;
+import aec1.implementacion.vista.AppWindow;
+import aec1.implementacion.vista.AuxiliarWindow;
+import aec1.implementacion.vista.MoveWindow;
+import aec1.implementacion.vista.Register_Window;
 
 /**
  * CLass Control_Handler, this class is the intermediary between the view and the actual application<br>
@@ -485,7 +484,7 @@ public class Control_Handler {
 					Cliente client = null;
 					//check whether the client is in the cinema or not
 					// and get the client name and surname
-					client= cine.buscarClienteEnCine(moveWindow_entrada.getTextNombre()); 
+					client= cine.buscarClienteEnCineDesdeEntrada(moveWindow_entrada.getTextNombre()); 
 					if( client != null){
 						//check whether the client is on the same list where it wants to go
 						// move it to the selected place
@@ -495,7 +494,7 @@ public class Control_Handler {
 						window.resetTextFields();
 
 					}else {
-						throw new Exception ("El cliente no esta registrado en la base de datos");
+						throw new Exception ("El cliente no esta registrado en la base de datos o ha pasado a la zona de proyeccion");
 					}
 				}catch(NoSuchElementException e) {
 					JOptionPane.showMessageDialog(registerWindow, "El campo esta vacio o la informaciones incompleta", "Informacion", JOptionPane.INFORMATION_MESSAGE);
