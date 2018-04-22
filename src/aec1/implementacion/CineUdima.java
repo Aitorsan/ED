@@ -661,20 +661,22 @@ public class CineUdima implements ICine {
 		
 	}
 
+	
 	/**
-	 * Buscar cliente por nombre
-	 */ 
+	 * Search and delete the client if its found in on of the following areas
+	 * @param nameSurname
+	 * @return boolean value true if the client was successfully deleted
+	 */
 	   public boolean deleteClient(String nameSurname) {
 		   
 		  boolean borrado = false;
 		  if(searchAndDelete(zonaEntrada,nameSurname)
-		  || searchAndDelete( zonaProyeccion,nameSurname)
 		  || searchAndDelete(taquillas_ventanilla_uno,nameSurname)
 		  || searchAndDelete( taquillas_ventanilla_dos,nameSurname)
 		  || searchAndDelete(comercio,nameSurname)
 		  || searchAndDelete( control,nameSurname)
-		  || searchAndDelete(control_prioritario,nameSurname)
-		  || searchAndDelete(salida, nameSurname)){
+		  || searchAndDelete(control_prioritario,nameSurname))
+	       {
 			  borrado = true;
 		  }
 		   

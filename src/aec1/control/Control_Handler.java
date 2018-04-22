@@ -63,6 +63,8 @@ public class Control_Handler {
 		window.getSiguiente_comercio_boton().addActionListener(b_listener);
 		window.getSiguiente_aseo_H_boton().addActionListener(b_listener);
 		window.getSiguiente_aseo_M_boton().addActionListener(b_listener);
+		window.getDesapilar_sala_boton().addActionListener(b_listener);
+		window.getSiguiente_salida_boton().addActionListener(b_listener);
 		//Register window buttons listener
 		registerWindow.getAceptar().addActionListener(b_listener);
 		registerWindow.getCancelar().addActionListener(b_listener);
@@ -86,7 +88,7 @@ public class Control_Handler {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-            //***********************************************************
+            //************************************************************
 			//             Main Window JButtons ( AppWindow )
 			//************************************************************/
 			if( event.getSource() == buttons[AppWindow.ADD_BUTTON]) {
@@ -136,7 +138,7 @@ public class Control_Handler {
 						client =(Cliente) c.primero();
 						client.comprarEntrada();
 
-						JOptionPane.showMessageDialog(window, "El cliente: "+client.getNombre()+" "+client.getPrimerApellido()+" ha comprado una entrada con éxito");					
+						JOptionPane.showMessageDialog(window, "El cliente: "+ client.getNombre()+" "+client.getPrimerApellido()+" ha comprado una entrada con éxito");					
 						c.quitarPrimero();
 						cine.move(client, "Lista Entrada");
 						
@@ -282,16 +284,38 @@ public class Control_Handler {
 			
 			//Salida JButton
 			if( event.getSource() == window.getSiguiente_salida_boton() ) {
-				deleteWindow.setVisible(true);
-
+			    String infoCliente = "";
+				cine.getSalida().primero();
+				if( cine.getSalida().estaDentro()) {
+					infoCliente += ((Cliente)cine.getSalida().recuperar()).getNombre() +" ";
+					infoCliente += ((Cliente)cine.getSalida().recuperar()).getPrimerApellido() +" ";
+					infoCliente += ((Cliente)cine.getSalida().recuperar()).getSegundoApellido() +" ";
+				    cine.getSalida().eliminar(cine.getSalida().recuperar());
+					JOptionPane.showMessageDialog(window, "El cliente: "+ infoCliente+ " se ha marchado del cine");
+					window.actualizarInformacion(cine, CineUdima.ALL);
+				}else {
+					JOptionPane.showMessageDialog(window, "La cola de salida esta vacia");
+				}
+                    
 			}
 			//Desapilar JButton
 			if( event.getSource() == window.getDesapilar_sala_boton() ) {
 				
-				//TODO:TODODODODO
 				
-				
-				
+				if( !cine.getSala_proyeccion().esVacia()) {
+					
+					try {
+						cine.getZonaProyeccion().insertar(cine.getSala_proyeccion().cima());
+						cine.getSala_proyeccion().desapilar();
+					}catch(DesbordamientoInferior e) {
+						JOptionPane.showMessageDialog(window, e.getMessage(), "Error", JOptionPane.ERROR);
+					}finally {
+						window.actualizarInformacion(cine, CineUdima.ALL);
+					}
+									
+				}else {
+					JOptionPane.showMessageDialog(window, "La sala esta vacia");
+				}
 
 			}			
             //************************************************************
@@ -311,24 +335,26 @@ public class Control_Handler {
 				    Pila stack = null;
 				    Cliente cl = null;
 				  try{
+					
 					  stack=cine.getSala_proyeccion();
 	           			 if(!stack.esVacia()) {
 	           				 
 	           				 if(cine.searhClientInProjectionRoom(moveWindow_proyeccion.getTextNombre())) {
 	           					 
-	           				    throw new Exception("El cliente no puede salir de la sala de cine hasta que salgan los ultimos en entrar");    
+	           				    throw new Exception("El cliente no puede salir usando la forma convencional hay que desapilar la sala");    
 	           				 }
 	           							 
-	           			 }else {
+	           			 }
 	           			
 	           				 
 	           				cl = cine.buscarClienteEnCine(moveWindow_proyeccion.getTextNombre());
 	           			    if(cl != null) {
 	           			    	cine.move(cl,moveWindow_proyeccion.getSelectedItem() );	
+	           			    }else {
+	           			    	JOptionPane.showMessageDialog(window, "El cliente no esta registrado en el cine");
 	           			    }
 	           				
 	           				 
-	           			 }
 				  }catch(Exception e) {
 					  JOptionPane.showMessageDialog(moveWindow_proyeccion,e.getMessage());
 				  }finally {
@@ -424,7 +450,7 @@ public class Control_Handler {
     					window.actualizarInformacion( cine, 
     					CineUdima.ENTRADA|CineUdima.COMERCIO|CineUdima.CONTROL|CineUdima.CONTROL_P|CineUdima.TAQUILLA_UNO|CineUdima.TAQUILLA_DOS);
     				}else {
-    					JOptionPane.showMessageDialog(registerWindow, "El cliente no puede salir si no esta en la zona de entrada o en la cola de salida", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+    					JOptionPane.showMessageDialog(registerWindow, "El cliente puede : \n1.no estar registrado\n2.estar en la zona de proyeccion\nPor este motivo no se puede eliminar de esta forma", "Informacion", JOptionPane.INFORMATION_MESSAGE);
     				}
                     
                }catch(NoSuchElementException e) {

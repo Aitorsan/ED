@@ -26,7 +26,7 @@ public class MoveWindow extends AuxiliarWindow{
 		    		
 		}if((flag & PROYECCION) != 0) {
 			option_string = new String[5];
-			option_string[0] = "Lista proyeccion";
+			option_string[0] = "Proyeccion";
 		    option_string[1] = "Aseo mujeres";
 		    option_string[2] = "Aseo hombres";
 		    option_string[3] = "Sala cine";
