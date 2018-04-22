@@ -67,7 +67,7 @@ public class Cliente {
     
     /**Devuelve verdadero si el cliente tiene una entrada, falso si no la tiene**/
    public boolean clienteTieneEntrada() {
-	   return (entrada != 0);
+	   return (entrada > 0);
    }
     
    /**Disminuye el numero de entradas que tiene el cliente al ser usada en el acceso a la sala de proyeccion*/
@@ -79,7 +79,7 @@ public class Cliente {
    
    /**Devuelve verdadero si el cliente tiene alguna situacion especial que le da prioridad*/
    public boolean prioritario() {
-	     return (prioridad == Prioridad.EMBARAZADA || prioridad == Prioridad.TERCERA_EDAD);
+	     return (prioridad == Prioridad.EMBARAZADA || prioridad == Prioridad.TERCERA_EDAD|| prioridad == Prioridad.DISCAPACIDAD);
    }
     
    
@@ -121,10 +121,12 @@ public class Cliente {
    public void setPrioridad(String prioridad) {
 	   if(prioridad.equals("Ninguna")) {
 		   this.prioridad = Prioridad.NORMAL;
-	   }else if( prioridad.equals("Tercera edad")) {
+	   }else if( prioridad.equals("Tercera Edad")) {
 		   this.prioridad = Prioridad.TERCERA_EDAD;
 	   }else if( prioridad.equals("Embarazada")) {
 		   this.prioridad = Prioridad.EMBARAZADA;
+	   }else if( prioridad.equals("Discapacitado/a")){
+		   this.prioridad = Prioridad.DISCAPACIDAD;
 	   }
    }
    

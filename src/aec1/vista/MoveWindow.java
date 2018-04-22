@@ -4,7 +4,8 @@ import javax.swing.JComboBox;
 
 public class MoveWindow extends AuxiliarWindow{
 	private static final long serialVersionUID = 1L;
-	
+	public final static char ENTRADA=1;
+	public final static char PROYECCION = 2;
 	//Options where we can move around
 	JComboBox<String> options;
 	
@@ -12,17 +13,27 @@ public class MoveWindow extends AuxiliarWindow{
 	String[] option_string;
 	
 	
-	public MoveWindow(String frameName, String buttonName) {
+	public MoveWindow(String frameName, String buttonName,char flag) {
 		super(frameName, buttonName);
 		
-		option_string = new String[6];
-		option_string[0] = "Lista Entrada";
-	    option_string[1] = "Taquilla 1";
-	    option_string[2] = "Taquilla 2";
-	    option_string[3] = "Comercio";
-	    option_string[4] = "Control";
-	    option_string[5] = "Control prioritario";
-	    						
+		if( (flag & ENTRADA) != 0) {
+			option_string = new String[5];
+			option_string[0] = "Lista Entrada";
+		    option_string[1] = "Taquillas";
+		    option_string[2] = "Comercio";
+		    option_string[3] = "Control";
+		    option_string[4] = "Control prioritario";
+		    		
+		}if((flag & PROYECCION) != 0) {
+			option_string = new String[5];
+			option_string[0] = "Lista proyeccion";
+		    option_string[1] = "Aseo mujeres";
+		    option_string[2] = "Aseo hombres";
+		    option_string[3] = "Sala cine";
+		    option_string[4] = "Salida";
+		    
+		}
+							
 		options = new JComboBox<String>(option_string);
 		
 		

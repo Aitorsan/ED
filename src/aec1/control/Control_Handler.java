@@ -11,6 +11,9 @@ import javax.swing.JOptionPane;
 /*project imports*/
 import aec1.vista.AppWindow;
 import aec1.vista.Register_Window;
+import colas.Cola;
+import excepciones.DesbordamientoInferior;
+import pilas.Pila;
 import aec1.implementacion.CineUdima;
 import aec1.implementacion.Cliente;
 import aec1.vista.AuxiliarWindow;
@@ -18,11 +21,12 @@ import aec1.vista.MoveWindow;
 
 public class Control_Handler {
 
-	/*main aplication window*/
+	/*main application window*/
 	private AppWindow window;
 	private Register_Window  registerWindow;
 	private AuxiliarWindow deleteWindow;
-	private MoveWindow moveWindow;
+	private MoveWindow moveWindow_entrada;
+	private MoveWindow moveWindow_proyeccion;
 	/*Buttons*/
 	private JButton[] buttons;
 	/*Listeners*/
@@ -36,14 +40,15 @@ public class Control_Handler {
 		window = new AppWindow();
 		registerWindow = new Register_Window();
 		deleteWindow = new AuxiliarWindow("Eliminar","Eliminar");
-		moveWindow = new MoveWindow("Mover","Mover");
+		moveWindow_entrada = new MoveWindow("Mover","Mover",MoveWindow.ENTRADA);
+		moveWindow_proyeccion = new MoveWindow("Mover","Mover",MoveWindow.PROYECCION);
 		buttons = window.getButtonsToolBar();
 		cine = new CineUdima();
 		addListeners();
 	}
 
 	/**
-	 * Funcion que registra los listeners en ls diferentes elementos
+	 * Method that add listener to the elements
 	 */
 	private void addListeners() {
 		// main window buttons listener
@@ -52,14 +57,22 @@ public class Control_Handler {
 		}
 		window.getAbandonar_cola_boton_zonaProyeccion().addActionListener(b_listener);
 		window.getAbandonar_cola_zonaEntrada_boton().addActionListener(b_listener);
+		window.getSiguiente_taquilla_uno_boton().addActionListener(b_listener);
+		window.getSiguiente_taquilla_dos_boton().addActionListener(b_listener);
+		window.getSiguiente_control_boton().addActionListener(b_listener);
+		window.getSiguiente_comercio_boton().addActionListener(b_listener);
+		window.getSiguiente_aseo_H_boton().addActionListener(b_listener);
+		window.getSiguiente_aseo_M_boton().addActionListener(b_listener);
 		//Register window buttons listener
 		registerWindow.getAceptar().addActionListener(b_listener);
 		registerWindow.getCancelar().addActionListener(b_listener);
 		//Delete window buttons listener
 		deleteWindow.getConfirmationButton().addActionListener(b_listener);
 		deleteWindow.getCancelButton().addActionListener(b_listener);
-		//move window buttons listener
-		moveWindow.getConfirmationButton().addActionListener(b_listener);
+		//move window buttons entry area listener
+		moveWindow_entrada.getConfirmationButton().addActionListener(b_listener);
+		//move window buttons projection area listeners
+		moveWindow_proyeccion.getConfirmationButton().addActionListener(b_listener);
 	}
 
 
@@ -72,25 +85,22 @@ public class Control_Handler {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-
-
 			
             //***********************************************************
 			//             Main Window JButtons ( AppWindow )
 			//************************************************************/
 			if( event.getSource() == buttons[AppWindow.ADD_BUTTON]) {
-
 				registerWindow.setVisible(true);
-
 
 			}
 
 			if( event.getSource() == buttons[AppWindow.ABANDONAR_COLA_BUTTON] 
-					|| event.getSource() == window.getAbandonar_cola_boton_zonaProyeccion()
+					
 					|| event.getSource() == window.getAbandonar_cola_zonaEntrada_boton()) {
-                 moveWindow.setVisible(true);
+                 moveWindow_entrada.setVisible(true);
 			}
-
+			
+			
 			if( event.getSource() == buttons[AppWindow.REMOVE_BUTTON]) {
 
 				deleteWindow.setVisible(true);
@@ -109,12 +119,226 @@ public class Control_Handler {
 
 			}
 			
-			if( event.getSource() == buttons[AppWindow.ABANDONAR_COLA_BUTTON]) {
+			
+			//next taquilla uno and next taquilla dos
+			if( event.getSource() == window.getSiguiente_taquilla_uno_boton() || event.getSource() == window.getSiguiente_taquilla_dos_boton()) {
+				
+				Cola c = null;
+				Cliente client = null;
+				if(event.getSource() == window.getSiguiente_taquilla_uno_boton())
+				   c = cine.getTaquillas_ventanilla_uno();
+				if(event.getSource() == window.getSiguiente_taquilla_dos_boton())
+                   c = cine.getTaquillas_ventanilla_dos();
+				
+				try {
+					if( !c.esVacia()) {
+                           
+						client =(Cliente) c.primero();
+						client.comprarEntrada();
+
+						JOptionPane.showMessageDialog(window, "El cliente: "+client.getNombre()+" "+client.getPrimerApellido()+" ha comprado una entrada con éxito");					
+						c.quitarPrimero();
+						cine.move(client, "Lista Entrada");
+						
+					}else {
+						JOptionPane.showMessageDialog(window, "la cola esta vacia");
+					}
+				}catch(DesbordamientoInferior e) {
+                    //TODO:handle the exception
+				}catch(Exception e_2) {
+					//TODO:handle the exception
+				}
+				finally {
+					window.actualizarInformacion(cine, CineUdima.ALL);	
+				}
+			}
+			//next control queue
+			if( event.getSource() == window.getSiguiente_control_boton()) {
+			
+				// variables to perform the task
+				Cola p_control = null;
+				Cola control = null; 
+				try {
+					// first we look for people in the priority queue
+					p_control = cine.getControl_prioritario();
+					control = cine.getControl();
+					if( !p_control.esVacia()) {
+						
+						Cliente c = (Cliente)p_control.primero();
+						p_control.quitarPrimero();
+						// second we check if the client already has a ticket
+						// if the client do not have a ticket, then we move it to the entry list
+						// if the client has a ticket we move it to the projection area of the Cinema and decrease the number of tickets.
+						if( c.clienteTieneEntrada()) {
+							c.gastarEntrada();
+							cine.move(c, "Proyeccion");
+							JOptionPane.showMessageDialog(window, "EL cliente ha accedido a la zona de Proyeccion");
+						}else {
+							cine.move(c,"Lista Entrada");
+							JOptionPane.showMessageDialog(window, "EL cliente no tiene entrada");
+						}
+					
+					}else if(!control.esVacia()) {
+						
+						// third we check for clients in the control queue
+						// fourth we check again if the client already has a ticket
+						// if the client do not have a ticket, then we move it to the entry list
+						// if the client has a ticket we move it to the projection area of the Cinema and decrease the number of tickets.
+						Cliente c = (Cliente)control.primero();
+						control.quitarPrimero();
+						if( c.clienteTieneEntrada()) {
+							c.gastarEntrada();
+							cine.move(c, "Proyeccion");
+							JOptionPane.showMessageDialog(window, "EL cliente ha accedido a la zona de Proyeccion");
+						}else {
+							cine.move(c,"Lista Entrada");
+							JOptionPane.showMessageDialog(window, "EL cliente no tiene entrada");
+						}
+					}else {
+						JOptionPane.showMessageDialog(window, "No hay clientes en la cola");
+					}
+					
+				}catch(DesbordamientoInferior e) {
+					JOptionPane.showMessageDialog(window, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				} catch (Exception e_2) {
+					JOptionPane.showMessageDialog(window, e_2.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+					
+				}finally {
+				
+					window.actualizarInformacion(cine, CineUdima.ALL);
+				}		
 				
 			}
 			
 			
+			//next comercio JButton
+			if(event.getSource() == window.getSiguiente_comercio_boton()) {
+				try {
+					if(!cine.getComercio().esVacia()) {
+                            cine.move(((Cliente)(cine.getComercio().primero())),"Lista Entrada");
+                            cine.getComercio().quitarPrimero();
+                            JOptionPane.showMessageDialog(window, "EL cliente ha sido atendido en el comercio y ha comprado palomitas y refrescos");
+					}else {
+                        JOptionPane.showMessageDialog(window, "No existen clientes que antender");
+					}
+				}catch(DesbordamientoInferior e) {
+					JOptionPane.showMessageDialog(window,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);           
+				}catch(Exception e_2) {
+					JOptionPane.showMessageDialog(window,e_2.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}finally {
+					window.actualizarInformacion(cine, CineUdima.ALL);
+				}
+			}
+			
+			
+			//--------------------
+			//ZONA DE PROYECCION
+			//-------------------
+			if( event.getSource() == window.getAbandonar_cola_boton_zonaProyeccion()){
+				moveWindow_proyeccion.setVisible(true);
 
+			}
+			//next man toilets
+			if( event.getSource() == window.getSiguiente_aseo_H_boton() ) {
+
+				try {
+					if(!cine.getAseo_h().esVacia()) {
+                            cine.move(((Cliente)(cine.getAseo_h().primero())),"Proyeccion");
+                            cine.getAseo_h().quitarPrimero();
+                            JOptionPane.showMessageDialog(window, "El cliente ha terminado en el aseo de caballeros");
+					}else {
+                        JOptionPane.showMessageDialog(window, "No hay clientes en el aseo de caballeros");
+					}
+				}catch(DesbordamientoInferior e) {
+					JOptionPane.showMessageDialog(window,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}catch(Exception e_2) {
+					JOptionPane.showMessageDialog(window,e_2.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}finally {
+					window.actualizarInformacion(cine, CineUdima.ALL);
+				}
+
+				
+			}
+			
+			//next Women toilets
+			if( event.getSource() ==window.getSiguiente_aseo_M_boton() ) {
+				try {
+					if(!cine.getAseo_m().esVacia()) {
+                            cine.move(((Cliente)(cine.getAseo_m().primero())),"Proyeccion");
+                            cine.getAseo_m().quitarPrimero();
+                            JOptionPane.showMessageDialog(window, "El cliente ha terminado en el aseo de mujeres");
+					}else {
+                        JOptionPane.showMessageDialog(window, "No hay clientes en el aseo de mujeres");
+					}
+				}catch(DesbordamientoInferior e) {
+					JOptionPane.showMessageDialog(window,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}catch(Exception e_2) {
+					JOptionPane.showMessageDialog(window,e_2.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}finally {
+					window.actualizarInformacion(cine, CineUdima.ALL);
+				}
+			}
+			
+			
+			//Salida JButton
+			if( event.getSource() == window.getSiguiente_salida_boton() ) {
+				deleteWindow.setVisible(true);
+
+			}
+			//Desapilar JButton
+			if( event.getSource() == window.getDesapilar_sala_boton() ) {
+				
+				//TODO:TODODODODO
+				
+				
+				
+
+			}			
+            //************************************************************
+			//               move Window Projection area JButtons
+			//************************************************************/
+			
+			if(event.getSource() == moveWindow_proyeccion.getCancelButton()) {
+	               moveWindow_proyeccion.resetTextFields();
+				
+			}
+			
+			//move jButton
+			if(event.getSource() == moveWindow_proyeccion.getConfirmationButton()) {
+				
+				//check if the client is inside the projection room cause if its there the only way to go out is to move out the other clients
+			       
+				    Pila stack = null;
+				    Cliente cl = null;
+				  try{
+					  stack=cine.getSala_proyeccion();
+	           			 if(!stack.esVacia()) {
+	           				 
+	           				 if(cine.searhClientInProjectionRoom(moveWindow_proyeccion.getTextNombre())) {
+	           					 
+	           				    throw new Exception("El cliente no puede salir de la sala de cine hasta que salgan los ultimos en entrar");    
+	           				 }
+	           							 
+	           			 }else {
+	           			
+	           				 
+	           				cl = cine.buscarClienteEnCine(moveWindow_proyeccion.getTextNombre());
+	           			    if(cl != null) {
+	           			    	cine.move(cl,moveWindow_proyeccion.getSelectedItem() );	
+	           			    }
+	           				
+	           				 
+	           			 }
+				  }catch(Exception e) {
+					  JOptionPane.showMessageDialog(moveWindow_proyeccion,e.getMessage());
+				  }finally {
+					  window.actualizarInformacion(cine, CineUdima.ALL);
+				  }
+			
+			
+			}
+					
+			
             //***********************************************************
 			//               RegisterWindow JButtons
 			//************************************************************/
@@ -215,9 +439,9 @@ public class Control_Handler {
 			}
 
             //***********************************************************
-			//            Move client window JButtons
+			//            Move client entry area window JButtons
 			//************************************************************/
-			if( event.getSource() == moveWindow.getConfirmationButton()) {
+			if( event.getSource() == moveWindow_entrada.getConfirmationButton()) {
 				
 
 				try {
@@ -225,11 +449,11 @@ public class Control_Handler {
 					Cliente client = null;
 					//check whether the client is in the cinema or not
 					// and get the client name and surname
-					client= cine.buscarClienteEnCine(moveWindow.getTextNombre()); 
+					client= cine.buscarClienteEnCine(moveWindow_entrada.getTextNombre()); 
 					if( client != null){
 						//check whether the client is on the same list where it wants to go
 					   // move it to the selected place
-						cine.move(client,moveWindow.getSelectedItem());
+						cine.move(client,moveWindow_entrada.getSelectedItem());
 				
 						///reset the fields
 						window.resetTextFields();
@@ -248,26 +472,11 @@ public class Control_Handler {
 				}
 				
 			}
-			if( event.getSource() == moveWindow.getCancelButton()) {
-				moveWindow.resetTextFields();
+			if( event.getSource() == moveWindow_entrada.getCancelButton()) {
+				moveWindow_entrada.resetTextFields();
 			}
-
-		 
 			
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		
-		
 		}//method end
 
 

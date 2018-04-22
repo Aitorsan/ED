@@ -150,7 +150,11 @@ public class CineUdima implements ICine {
 	}
 	
 	
-	//TODO ASDFASFASFDASDFA
+	/**
+	 * Search for a cliente in the Entry area
+	 * @param nameSurname
+	 * @return
+	 */
 	public Cliente buscarClienteEnCine(String nameSurname) {
 	
 
@@ -178,8 +182,14 @@ public class CineUdima implements ICine {
 
 		if( client == null) 
 			client = search( salida, nameSurname);
-
-
+       
+		if(client == null) {
+            client = search(aseo_h,nameSurname);	
+        }
+		
+		if( client == null) {
+			client = search(aseo_m,nameSurname);
+		}
 			  	   
 		 return client;
 	}
@@ -191,11 +201,27 @@ public class CineUdima implements ICine {
 				
 				  zonaEntrada.insertar(c);
 			  }
-			  else if( where.equals("Taquilla 1") && !isTheSame(taquillas_ventanilla_uno,c)) {
-				  taquillas_ventanilla_uno.insertar(c);
-			  }
-			  else if( where.equals("Taquilla 2") && !isTheSame(taquillas_ventanilla_dos,c)) {
-				  taquillas_ventanilla_dos.insertar(c);
+			  else if( where.equals("Taquillas") && !isTheSame(taquillas_ventanilla_uno,c)&& !isTheSame(taquillas_ventanilla_dos,c)) {
+				  int lessPopulatedQueue = 0, taquillaUno = 0,taquillaDos = 0;
+				 taquillaUno =  countClientsTicketOffice(taquillas_ventanilla_uno);
+				 taquillaDos =  countClientsTicketOffice(taquillas_ventanilla_dos);
+				  
+				 if(taquillaDos < taquillaUno)
+					 lessPopulatedQueue = 2;
+				 
+				  switch(lessPopulatedQueue) {
+				  
+				  case 0:
+				  case 1:
+					  taquillas_ventanilla_uno.insertar(c);
+					  lessPopulatedQueue = 1;
+				  break;
+				  case 2:
+					  taquillas_ventanilla_dos.insertar(c);
+		    	  break;
+				  
+				  }
+				 throw new Exception("El cliente ha elegido la taquilla: "+lessPopulatedQueue);
 			  }
 			  else if( where.equals("Comercio")&&  !isTheSame(comercio,c)) {
 				  comercio.insertar(c);
@@ -209,24 +235,73 @@ public class CineUdima implements ICine {
 					  throw new Exception("El cliente no es prioritario");
 					  
 				  }
-				  
 				 
 			  }
 			  else if( where.equals( "Control") && !isTheSame(control,c)){
 				  if(c.prioritario()) {
 					  control_prioritario.insertar(c);
 					  throw new Exception("El cliente debe ir a la cola prioritaria");
+				  }else {
+					  control.insertar(c);
 				  }
-				  control.insertar(c);
+				 
 			  }
-		}
-		 
-		 
-		  
-		  //ampliar para la sala de proyeccion
+			  else if(where.equals("Proyeccion")) {
+				  zonaProyeccion.insertar(c);
+			  }else if(where.equals("Aseo hombres")) {
+				  if( c.getSexo() == 'H') {
+                      aseo_h.insertar(c);
+				  }else {
+					  aseo_m.insertar(c);
+                     throw new Exception("El cliente es una mujer no puede entrar en el aseo de hombres el cliente ha sido movido al aseo correspondiente");
+				  }
+
+			  }else if(where.equals("Aseo mujeres")) {
+				  if( c.getSexo() == 'M') { 
+					  aseo_m.insertar(c);
+				  }else {
+					  aseo_h.insertar(c);
+					     throw new Exception("El cliente es un hombre no puede entrar en el aseo de mujeres, el cliente ha sido movido al aseo correspondiente");
+				  }  
+			  }else if(where.equals("Sala cine")){
+				  sala_proyeccion.apilar(c);
+			  }else if(where.equals("Salida")) {
+				  salida.insertar(c);
+			  }
+		
+				
+		}  
+
 		  
 	  }
-	 /**
+	  
+	  
+	  /**
+	   * Count the number of clients in a queue
+	   * @param taquillas_ventanilla_uno2
+	   * @return
+	   */
+	 private int countClientsTicketOffice(Cola c) {
+		 int counter = 0;
+		 Cola aux =null; 
+		try{
+			 aux = new ColaEnlazada();
+			 while(!c.esVacia()) {
+				 ++counter;
+				 aux.insertar(c.primero());
+				 c.quitarPrimero();
+			 }
+			 while(!aux.esVacia()) {
+				 c.insertar(aux.primero());
+				 aux.quitarPrimero();
+			 }
+		}catch(DesbordamientoInferior e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return counter;
+	}
+	/**
 	    * Search for a client on the list, with a given name and surname
 	    * @param l
 	    * @param name
@@ -470,6 +545,82 @@ public class CineUdima implements ICine {
 	}
 	
 	/**
+	 * Search a client inside the projection room by a given name and surname
+	 * @param nameAndSurname
+	 * @return
+	 */
+	public boolean searhClientInProjectionRoom(String nameAndSurname) {
+		  StringTokenizer str = new StringTokenizer(nameAndSurname);
+		   String name = str.nextToken();
+		   String surname = str.nextToken();
+		   String secondSurname = str.nextToken(); 
+		   Pila stack = new PilaVector(10);
+			boolean found = false;
+			try {
+			
+				while(!sala_proyeccion.esVacia()) {
+				
+					if( name.equals(((Cliente)sala_proyeccion.cima()).getNombre())&&
+					    surname.equals(((Cliente)sala_proyeccion.cima()).getPrimerApellido())&&
+					    secondSurname.equals(((Cliente)sala_proyeccion.cima()).getSegundoApellido())){
+						found=true;
+					}
+		
+					
+					
+					stack.apilar(sala_proyeccion.cima());
+					sala_proyeccion.desapilar();
+			
+				}
+				
+				while( !stack.esVacia()) {
+					sala_proyeccion.apilar(stack.cima());
+					stack.desapilar();
+				}
+			
+				
+			} catch (DesbordamientoInferior e) {
+			
+				//TODO:
+			}
+				
+			return found;
+	}
+	
+	/**
+	 * Search who is the last client that enters in the projection room
+	 * @param nameAndSurname
+	 * @return
+	 */
+	public boolean isLastInProjectionRoom(String nameAndSurname) {
+		  StringTokenizer str = new StringTokenizer(nameAndSurname);
+		   String name = str.nextToken();
+		   String surname = str.nextToken();
+		   String secondSurname = str.nextToken(); 
+			boolean isFirst = false;
+			try {
+			
+				if(!sala_proyeccion.esVacia()) {
+				
+					if( name.equals(((Cliente)sala_proyeccion.cima()).getNombre())&&
+					    surname.equals(((Cliente)sala_proyeccion.cima()).getPrimerApellido())&&
+					    secondSurname.equals(((Cliente)sala_proyeccion.cima()).getSegundoApellido())){
+						isFirst=true;
+					}
+			
+				}
+				
+			} catch (DesbordamientoInferior e) {
+			
+				//TODO:
+			}
+				
+			
+			return isFirst;
+		
+	}
+	
+	/**
 	 * Busca si un cliente esta en la sala de proyeccion
 	 * debido a que es un stack tenemos que buscar una 
 	 * forma de buscarlos elementos y volver a ponerlos 
@@ -484,7 +635,9 @@ public class CineUdima implements ICine {
 		
 			while(!sala_proyeccion.esVacia()) {
 			
-				if( c.getNombre().equals(sala_proyeccion.cima())){
+				if( c.getNombre().equals(((Cliente)sala_proyeccion.cima()).getNombre())&&
+						c.getPrimerApellido().equals(((Cliente)sala_proyeccion.cima()).getPrimerApellido())
+						&& c.getSegundoApellido().equals(((Cliente)sala_proyeccion.cima()).getSegundoApellido())){
 					encontrado=true;
 				}
 				aux.apilar(sala_proyeccion.cima());

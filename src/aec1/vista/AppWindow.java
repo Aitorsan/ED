@@ -16,7 +16,7 @@ import colas.Cola;
 import colas.ColaEnlazada;
 import excepciones.DesbordamientoInferior;
 import listas.Lista;
-
+import pilas.Pila;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -171,7 +171,7 @@ public class AppWindow extends JFrame{
 
 		buttons[ADD_BUTTON].setText("registrar cliente");
 		buttons[REMOVE_BUTTON].setText("Eliminar cliente");
-		buttons[ABANDONAR_COLA_BUTTON].setText("abandonar cola");
+		buttons[ABANDONAR_COLA_BUTTON].setText("Mover/Abandonar cola");
 		buttons[ZONA_ENTRADA].setText("Zona-Entrada");
 		buttons[ZONA_PROYECCION].setText("Zona-Proyeccion");
 
@@ -198,7 +198,7 @@ public class AppWindow extends JFrame{
 		//JButtons zona entrada
 
 		//Ventana de abandonar cola
-		abandonar_cola_zonaEntrada = new JButton("Abandonar cola");
+		abandonar_cola_zonaEntrada = new JButton("Mover/Abandonar cola");
 		siguiente_taquilla_uno=new JButton("siguiente 1");
 		siguiente_taquilla_dos = new JButton("siguiente 2");
 		siguiente_comercio = new JButton("Siguiente c.");
@@ -259,7 +259,13 @@ public class AppWindow extends JFrame{
 		text_Cola_Comercio= new JTextArea();
 		text_Cola_Control= new JTextArea();
 		text_Cola_Control_Prioritario= new JTextArea();
-
+        //make not editable text areas
+		text_Entrada.setEditable(false);
+		text_Taquilla_uno.setEditable(false);
+		text_Taquilla_dos.setEditable(false);
+		text_Cola_Comercio.setEditable(false);
+		text_Cola_Control.setEditable(false);
+		text_Cola_Control_Prioritario.setEditable(false);
 		//Scrollbars zona Entrada
 
 		scroll[SCROLL_ENTRADA] = new JScrollPane(text_Entrada,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -323,7 +329,7 @@ public class AppWindow extends JFrame{
 		//TODO:Ventana con JComboBox para elegir que cola abandonar nueva clase
 
 		
-		abandonar_cola   = new JButton ("Abandonar cola");
+		abandonar_cola   = new JButton ("Mover/Abandonar cola");
 		siguiente_aseo_H = new JButton ("siguiente H"); 
 		siguiente_aseo_M = new JButton ("siguiente M"); 
 		desapilar_sala   = new JButton ("Desapilar sala");
@@ -587,9 +593,6 @@ public class AppWindow extends JFrame{
 	 */
 	public void actualizarInformacion(CineUdima cine,int flag ) {
 
-
-		
-
 	
 		if( (flag & CineUdima.CONTROL) != 0) {
 			
@@ -645,12 +648,61 @@ public class AppWindow extends JFrame{
 		
 	      if((CineUdima.SALIDA&flag) != 0){
 			
-			text_Proyeccion.setText(getInfo(cine.getSalida()));
+			text_Salida.setText(getInfo(cine.getSalida()));
 
 		}
+	      
+	      if((CineUdima.SALA&flag)!= 0) {
+	    	  text_Sala_Proyeccion.setText(gentInfo(cine.getSala_proyeccion()));
+	      }
 		
 	}
 
+    /**
+     * This method get the information in form of string to be displayed on the GUI
+     * @param sala_proyeccion
+     * @return the information about the clients within the projection room
+     */
+    
+	private String gentInfo(Pila sala_proyeccion) {
+		
+	   // we want to simulate on the screen the effect of pop up a client from the  projection room
+	  // so we use a queue to display first the last client on the stack
+		Cola queue = new ColaEnlazada();
+		String info = "";
+		try {
+			
+          while(!sala_proyeccion.esVacia()) {
+        	  
+        	  queue.insertar(sala_proyeccion.cima());
+        	  sala_proyeccion.desapilar();
+          }
+		
+          while(!queue.esVacia()) {
+        	  info += ((Cliente)queue.primero()).getNombre()+" ";
+        	  info += ((Cliente)queue.primero()).getPrimerApellido()+" ";
+        	  info += info += ((Cliente)queue.primero()).getSegundoApellido()+"\n";
+          }
+          
+          //
+			
+			
+		}catch(DesbordamientoInferior e) {
+			
+			
+			
+		}
+		
+		
+	
+		
+		
+		
+		
+		
+		
+		return null;
+	}
 
 	/**
 	 * Funcion auxiliar para recoger la información de una cola
@@ -663,9 +715,8 @@ public class AppWindow extends JFrame{
 		try {
 			while(!c.esVacia()) {
 
-
 				info+= ((Cliente)c.primero()).getNombre()+" ";
-				info+= ((Cliente)c.primero()).getPrimerApellido()+"";
+				info+= ((Cliente)c.primero()).getPrimerApellido()+" ";
 				info+= ((Cliente)c.primero()).getSegundoApellido()+"\n";
 				colaAuxi.insertar(c.primero());
 				c.quitarPrimero();
