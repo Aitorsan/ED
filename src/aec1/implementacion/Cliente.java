@@ -1,7 +1,11 @@
 package aec1.implementacion;
 
 
-
+/**
+ * Client class content all the information relevant to register a single client on the system
+ * @author Aitor Sanmartin Ferreira
+ *
+ */
 public class Cliente {
 
 	private String nombre;
@@ -12,7 +16,7 @@ public class Cliente {
     private char sexo;
     private int entrada;
  
-    /**Constructor sin parametros**/
+    /**Constructor without parameters**/
     public Cliente() {
     	  
 	     this.nombre = null;
@@ -24,7 +28,7 @@ public class Cliente {
 	     this.entrada = 0;
     
     }
-    /**Constructor con parametros**/
+    /**Constructor with parameters**/
     public Cliente( String nombre,String primerApellido,String segundoApellido, int edad, Prioridad prioridad, char sexo) {
     	   
     	     this.nombre = nombre;
@@ -36,72 +40,109 @@ public class Cliente {
     	     this.entrada = 0;
     }
     
-    /**El cliente aumenta la variable entrada si decide comprar una**/
+    /**
+     * The number of tickets increments if the client decide to buy a ticket
+     */
     public void comprarEntrada() {
     	   ++entrada;
     }
-    /**Devuelve los datos sobre nombre del cliente**/
+   /**
+    * Getter that return the name of a client
+    * @return nombre
+    */
     public String getNombre() {
    
     	  return nombre;
     }
     
     
-    /**Devuelve los datos sobre el primer apellido del cliente**/
+    /**
+     * Getter that returns the first surname of a client
+     * @return primerApellido
+     */
     public String getPrimerApellido() {
    
     	  return primerApellido;
     }
     
-    /**Devuelve los datos sobre el segundo apellido del cliente**/
+    /**
+     * Getter that returns the second surname of a client
+     * @return segundoApellido
+     */
     public String getSegundoApellido() {
    
     	  return segundoApellido;
     }
     
     
-    /**Devuelve la edad del cliente*/
+ /**
+  * Getter that returns the age of the client
+  * @return edad
+  */
     public int getEdad() {
       	return edad;
     }
     
-    /**Devuelve verdadero si el cliente tiene una entrada, falso si no la tiene**/
+    /**
+     * Check if the client has a ticket or not
+     * @return true if the client has at least one ticket
+     */
    public boolean clienteTieneEntrada() {
 	   return (entrada > 0);
    }
     
-   /**Disminuye el numero de entradas que tiene el cliente al ser usada en el acceso a la sala de proyeccion*/
+   /**
+    * Diminish the number of tickets of the client
+    */
    public void gastarEntrada() {
 	   if( clienteTieneEntrada()) {
 		   --entrada;
 	   }
    }
    
-   /**Devuelve verdadero si el cliente tiene alguna situacion especial que le da prioridad*/
+   /**
+    * Method that returns true if the client has priority or not
+    * @return boolean
+    */
    public boolean prioritario() {
 	     return (prioridad == Prioridad.EMBARAZADA || prioridad == Prioridad.TERCERA_EDAD|| prioridad == Prioridad.DISCAPACIDAD);
    }
     
    
-   /**Devuelve el sexo del cliente, para saber a que aseo debe acudir**/
+  /**
+   * Getter 
+   * @return the gender of a client
+   */
    public char getSexo() {
 	   return sexo;
    }
    
-   /**Inicia el campo de nombre del cliente*/
+   /**
+    * Set the name of a client
+    * @param nombre
+    */
   public void setNombre(String nombre) {
 	  this.nombre = nombre;
   }
-  /**Inicia el campo de apellidos del cliente*/
+  /**
+   * Set the first surname
+   * @param primerApellido
+   */
   public void setPrimerApellido(String primerApellido) {
 	  this.primerApellido = primerApellido;
   }
    
-  /**Inicia el campo de apellidos del cliente*/
+  /**
+   * Set the second surname
+   * @param segundoApellido
+   */
   public void setSegundoApellido(String segundoApellido) {
 	  this.segundoApellido = segundoApellido;
   }
-   /**Set sexo**/
+   /**
+    * Set the gender of the client
+    * @param sexo
+    */
    public void setSexo(String sexo) {
 	   
 	   if( sexo.equals("Hombre")) {
@@ -111,13 +152,19 @@ public class Cliente {
 	   }
    }
    
-   /**Setter para la edad del cliente**/
+   /**
+    * Set the age of the client
+    * @param edad
+    */
    public void setEdad( int edad) {
 	   this.edad = edad;
    }
    
    
-   /**Setter para la prioridad del cliente **/
+   /**
+    * Set the level of priority of a client
+    * @param prioridad
+    */
    public void setPrioridad(String prioridad) {
 	   if(prioridad.equals("Ninguna")) {
 		   this.prioridad = Prioridad.NORMAL;
@@ -130,4 +177,4 @@ public class Cliente {
 	   }
    }
    
-}
+}//End of class

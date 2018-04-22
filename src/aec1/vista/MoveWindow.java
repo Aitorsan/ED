@@ -2,6 +2,11 @@ package aec1.vista;
 
 import javax.swing.JComboBox;
 
+/**
+ * Move Window class 
+ * @author Aitor Sanmartin Ferreira
+ *
+ */
 public class MoveWindow extends AuxiliarWindow{
 	private static final long serialVersionUID = 1L;
 	public final static char ENTRADA=1;
@@ -11,8 +16,13 @@ public class MoveWindow extends AuxiliarWindow{
 	
     //Options
 	String[] option_string;
-	
-	
+
+	/**
+	 * Method that sets the configuration of the frame components
+	 * @param frameName
+	 * @param buttonName
+	 * @param flag
+	 */
 	public MoveWindow(String frameName, String buttonName,char flag) {
 		super(frameName, buttonName);
 		
@@ -32,18 +42,14 @@ public class MoveWindow extends AuxiliarWindow{
 		    option_string[3] = "Sala cine";
 		    option_string[4] = "Salida";
 		    
-		}
-							
+		}			
 		options = new JComboBox<String>(option_string);
 		
-		
 		add(options);
-		
-		
 	}
 
   /**
-   * getter, that returns the selected option
+   * Getter, that returns the selected option
    * @return String
    */
 	public String getSelectedItem() {
@@ -51,4 +57,4 @@ public class MoveWindow extends AuxiliarWindow{
 	}
 	
 
-}
+}//End of the class

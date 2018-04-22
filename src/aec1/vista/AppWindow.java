@@ -150,14 +150,14 @@ public class AppWindow extends JFrame{
 	 */
 	private void initComponents() {
 
-		// set the layout
+		// Set the main layout
 		this.getContentPane().setLayout(new BorderLayout());
        
-		//JPanel aplicacion
+		//Application JPanels
 		panelAplicacion = new JPanel();
 		panelAplicacion.setLayout(new BoxLayout(panelAplicacion, getDefaultCloseOperation()));
 
-		//JTextArea zona proyeccion
+		//JTextArea projection area
 		text_Proyeccion = new JTextArea();
 		text_Aseo_Caballero= new JTextArea();
 		text_Aseo_Mujeres= new JTextArea();
@@ -165,11 +165,11 @@ public class AppWindow extends JFrame{
 		text_Salida= new JTextArea();
 
 
-		//Scrollbars
+		//JScrollbars
 		scroll = new JScrollPane[SCROLLBAR_SIZE];
 
 
-		//JButtons Del tool bar
+		//JToolBar buttons
 		buttons = new JButton[BUTTON_ARRAY_SIZE];
 		for( int i  =0 ; i < BUTTON_ARRAY_SIZE; ++i ) {
 			buttons[i] = new JButton();
@@ -187,7 +187,6 @@ public class AppWindow extends JFrame{
 			toolbar.add(buttons[i]);
 		}
 		toolbar.setFloatable(false);
-
 
 		/*-*******************************
 		 * Entry area configuration
@@ -430,13 +429,11 @@ public class AppWindow extends JFrame{
 
 
 		//Add JButtons to the Projection area
-	
 		zona_Proyeccion.add(abandonar_cola);
 		zona_Proyeccion.add(siguiente_aseo_H);
 		zona_Proyeccion.add(siguiente_aseo_M);
 		zona_Proyeccion.add(desapilar_sala );
 		zona_Proyeccion.add(siguiente_salida );
-
 
 		//Add JLables to the Projection area
 		zona_Proyeccion.add(l_zonaProyeccion);
@@ -444,7 +441,6 @@ public class AppWindow extends JFrame{
 		zona_Proyeccion.add(l_aseoMujer);
 		zona_Proyeccion.add(l_salaCine);
 		zona_Proyeccion.add(l_salida);
-
 
 		//Add other components to the Projection area
 		zona_Proyeccion.add(scroll[10]);
@@ -476,8 +472,6 @@ public class AppWindow extends JFrame{
 		zona_Entrada.add(scroll[2]);
 		zona_Entrada.add(scroll[1]);
 		zona_Entrada.add(scroll[0]);
-
-
 
 		//Add components to the main frame
 		panelAplicacion.add(zona_Entrada);
@@ -554,15 +548,16 @@ public class AppWindow extends JFrame{
 	}
 
 	/**
-	 * @return the desapilar_sala
+	 * Getter JButton
+	 * @return desapilar_sala
 	 */
 	public JButton getDesapilar_sala_boton() {
 		return desapilar_sala;
 	}
 
 	/**
-	 * Retorna todos los botones del tool bar de la ventana principal, en un array
-	 * @return
+	 * Return all the JToolbar buttons
+	 * @return JButton array
 	 */
 	public JButton[] getButtonsToolBar() {
 		return buttons;
@@ -570,7 +565,7 @@ public class AppWindow extends JFrame{
 
 	/**
 	 * This method interchange the visibility of the panel , that contains the information relative
-	 * to the area that they represetn. If we are in the entry area only the entry area JPanel will
+	 * to the area that they represent. If we are in the entry area only the entry area JPanel will
 	 * be visible
 	 * @param flag ZONA_ENTRADA_VISIBLE , ZONA_PROYECCION_VISIBLE
 	 */

@@ -24,40 +24,42 @@ public class CineUdima implements ICine {
 	public static final char LISTA_ZONA_PROYECCION = 0b00001011;
 	public static final char ALL           = 0b00001111;
 
-    // listas de las zonas
+    // Lists
 	Lista zonaEntrada;
 	Lista zonaProyeccion;
 	
-    //Si esta en la lista zona de entrada puede acceder a las siguientes colas
-	// aqui se puede salir del establecimiento siempre y cuando no se este en ninguna cola
+    //If the client is within the entry area can acces those queues
+	// In this area the client can always go out from the cinema without using the exit door.
 	Cola taquillas_ventanilla_uno;
 	Cola taquillas_ventanilla_dos;
 	Cola comercio;
 	Cola control;
 	Cola control_prioritario;
 	
-	// Si esta en la lista zona de proyeccion puede acceder a las siguientes areas
-	// la unica forma de salir aqui es que no este en ninguna de las colas y usando 
-	// la cola salida
+	 //If the client is within the entry area can acces the areas listed below
+	 //The only way to go out from the cinema once the client is inside this are is using
+	// the exit List "salida".
 	Cola aseo_m;
 	Cola aseo_h;
 	Pila sala_proyeccion;
     Lista salida;
 	
 	
-
+/**
+ * CindeUdima Constructor
+ */
 	public CineUdima() {
-		//registro
+		//register
 		zonaEntrada = new ListaEnlazada();
 		
-		//Zona Entrada
+		//Entry area
 		taquillas_ventanilla_uno = new ColaEnlazada();
 		taquillas_ventanilla_dos = new ColaEnlazada();
 		comercio = new ColaEnlazada();
 		control = new ColaEnlazada();
 		control_prioritario = new ColaEnlazada();
 		
-		//Zona Proyeccion
+		//Projection area
 		zonaProyeccion = new ListaEnlazada();
 	    aseo_m = new ColaEnlazada();
 		aseo_h = new ColaEnlazada();
@@ -65,8 +67,8 @@ public class CineUdima implements ICine {
 	    salida = new ListaEnlazada();
 	
 	}
-	/**Se registra el cliente en la zona de la entrada ya que es la primera zona</b>
-	 * a la que todos los clietes deben acceder primero
+	/**
+	 * Register method
 	 * @param cliente
 	 */
 	@Override
@@ -74,59 +76,11 @@ public class CineUdima implements ICine {
 	
            zonaEntrada.insertar(cliente);
 	}
-
 	
-	
-
 	/**
-	 * Si el cliente esta en la zona de Entrada, y decide irse 
-	 * puede hacerlo libremente, aunque haya comprado entrada
+	 * Search a a given client within the cinema
 	 * @param cliente
-	 */
-	@Override
-	public boolean borrarCliente(Cliente cliente) {
-	      boolean borrado = false;
-		
-	      if(salida.buscar(cliente) ) {
-	    	      sacarClienteDeLista(salida,cliente);
-	    	      borrado = true;
-		}else if( zonaEntrada.buscar(cliente)) {
-			  sacarClienteDeLista(zonaEntrada,cliente);
-			  borrado = true;
-		}else if (isTheSame( taquillas_ventanilla_uno, cliente) ) {
-			sacarClienteDeCola(taquillas_ventanilla_uno,cliente);
-			borrado = true;
-		}else if(isTheSame( taquillas_ventanilla_dos, cliente) ) {
-			sacarClienteDeCola(taquillas_ventanilla_dos,cliente);
-			borrado = true;
-		}else if (isTheSame( comercio, cliente) ) {
-			sacarClienteDeCola(comercio,cliente);
-			borrado = true;
-		}else if(isTheSame( control, cliente) ) {
-			sacarClienteDeCola(control,cliente);
-			borrado = true;
-		}else if(isTheSame( control_prioritario, cliente))  {
-			sacarClienteDeCola(control_prioritario,cliente);
-			borrado = true;
-		}
-		
-		return borrado;
-	}
-
-
-	@Override
-	public void moverClienteSalaPoyeccion(Cliente cliente) {
-		
-   
-	}
-	
-
-	
-
-	/**
-	 * Buscar un cliente en el cine
-	 * @param cliente
-	 * @return
+	 * @return true if the client is found
 	 */
 	public boolean buscarClienteEnCine(Cliente cliente) {
 		
@@ -151,9 +105,9 @@ public class CineUdima implements ICine {
 	
 	
 	/**
-	 * Search for a cliente in the Entry area
+	 * Search for a client within the cinema 
 	 * @param nameSurname
-	 * @return
+	 * @return If a client is found return that client object
 	 */
 	public Cliente buscarClienteEnCine(String nameSurname) {
 	
@@ -163,13 +117,11 @@ public class CineUdima implements ICine {
 		if( client == null) 
 			client =search( zonaProyeccion,nameSurname);
 
-
 		if( client == null) 
 			client = search( taquillas_ventanilla_uno,nameSurname);
 
 		if( client == null) 
 			client = search( taquillas_ventanilla_dos,nameSurname);
-
 
 		if( client == null) 
 			client =  search( comercio,nameSurname);
@@ -194,9 +146,15 @@ public class CineUdima implements ICine {
 		 return client;
 	}
 	
-	
+	/**
+	 * Moves a client from one place to another if that client exist.
+	 * @param c
+	 * @param where
+	 * @throws Exception
+	 */
 	  public void move( Cliente c , String where)throws Exception {
-		if( c != null) {
+		
+		  if( c != null) {
 			 if( where.equals("Lista Entrada")&& !isTheSame(zonaEntrada,c)) {
 				
 				  zonaEntrada.insertar(c);
@@ -268,40 +226,61 @@ public class CineUdima implements ICine {
 			  }else if(where.equals("Salida")) {
 				  salida.insertar(c);
 			  }
-		
-				
 		}  
 
 		  
 	  }
 	  
-	  
-	  /**
-	   * Count the number of clients in a queue
-	   * @param taquillas_ventanilla_uno2
-	   * @return
-	   */
-	 private int countClientsTicketOffice(Cola c) {
-		 int counter = 0;
-		 Cola aux =null; 
-		try{
-			 aux = new ColaEnlazada();
-			 while(!c.esVacia()) {
-				 ++counter;
-				 aux.insertar(c.primero());
-				 c.quitarPrimero();
-			 }
-			 while(!aux.esVacia()) {
-				 c.insertar(aux.primero());
-				 aux.quitarPrimero();
-			 }
-		}catch(DesbordamientoInferior e) {
-			System.out.println(e.getMessage());
+		/**
+		 * Search a client inside the projection room by a given name and surname
+		 * @param nameAndSurname
+		 * @return
+		 */
+		public boolean buscarCLienteEnSalaCine(String nameAndSurname) {
+			  StringTokenizer str = new StringTokenizer(nameAndSurname);
+			   String name = str.nextToken();
+			   String surname = str.nextToken();
+			   String secondSurname = str.nextToken(); 
+			   Pila stack = new PilaVector(10);
+				boolean found = false;
+				try {
+				
+					while(!sala_proyeccion.esVacia()) {
+					
+						if( name.equals(((Cliente)sala_proyeccion.cima()).getNombre())&&
+						    surname.equals(((Cliente)sala_proyeccion.cima()).getPrimerApellido())&&
+						    secondSurname.equals(((Cliente)sala_proyeccion.cima()).getSegundoApellido())){
+							found=true;
+						}
+			
+						
+						
+						stack.apilar(sala_proyeccion.cima());
+						sala_proyeccion.desapilar();
+				
+					}
+					
+					while( !stack.esVacia()) {
+						sala_proyeccion.apilar(stack.cima());
+						stack.desapilar();
+					}
+				
+					
+				} catch (DesbordamientoInferior e) {
+				
+					System.out.println("Error en pila Line: 519 CineUdima.java\nError message: "+e.getMessage());
+				}
+					
+				return found;
 		}
-		
-		return counter;
-	}
-	/**
+
+
+	
+	  
+	/*-*********************************************************
+	 * Auxiliar methods to help the class to make certain task
+	 ***********************************************************/
+		/**
 	    * Search for a client on the list, with a given name and surname
 	    * @param l
 	    * @param name
@@ -331,52 +310,77 @@ public class CineUdima implements ICine {
 		   return moved_client;
 	   }
 	
-	
-	   /**
-	    * Find and delete a client from the queue
-	    * @param c
-	    * @param name
-	    * @return true if the client was found 
-	    */
-	   private Cliente search(Cola c , String nameAndSurname) {
-		   StringTokenizer str = new StringTokenizer(nameAndSurname);
-		   String name = str.nextToken();
-		   String surname = str.nextToken();
-		   String secondSurname = str.nextToken();
-		  Cliente client = null;
-		   Cola auxiliar = new ColaEnlazada();
-		
-		   try {
-			   while(!c.esVacia() ) {
-				   
-				   if( name.equals(((Cliente)c.primero()).getNombre())
-						   &&surname.equals(((Cliente)c.primero()).getPrimerApellido())
-						   &&secondSurname.equals(((Cliente)c.primero()).getSegundoApellido())) {
-					   client = (Cliente)c.primero();
-					   c.quitarPrimero();
-					
-				   }else {
-					   auxiliar.insertar(c.primero());
-	                   c.quitarPrimero();	 
+		  /**
+		   * Count the number of clients in a queue, the client will choose<br>
+		   * the queue with less people waiting.
+		   * @param taquillas_ventanilla_uno2
+		   * @return
+		   */
+		 private int countClientsTicketOffice(Cola c) {
+			 int counter = 0;
+			 Cola aux =null; 
+			try{
+				 aux = new ColaEnlazada();
+				 while(!c.esVacia()) {
+					 ++counter;
+					 aux.insertar(c.primero());
+					 c.quitarPrimero();
+				 }
+				 while(!aux.esVacia()) {
+					 c.insertar(aux.primero());
+					 aux.quitarPrimero();
+				 }
+			}catch(DesbordamientoInferior e) {
+				System.out.println(e.getMessage());
+			}
+			
+			return counter;
+		}
+		 
+		 
+		 /**
+		    * Find and delete a client from the queue
+		    * @param c
+		    * @param name
+		    * @return true if the client was found 
+		    */
+		   private Cliente search(Cola c , String nameAndSurname) {
+			   StringTokenizer str = new StringTokenizer(nameAndSurname);
+			   String name = str.nextToken();
+			   String surname = str.nextToken();
+			   String secondSurname = str.nextToken();
+			  Cliente client = null;
+			   Cola auxiliar = new ColaEnlazada();
+			
+			   try {
+				   while(!c.esVacia() ) {
+					   
+					   if( name.equals(((Cliente)c.primero()).getNombre())
+							   &&surname.equals(((Cliente)c.primero()).getPrimerApellido())
+							   &&secondSurname.equals(((Cliente)c.primero()).getSegundoApellido())) {
+						   client = (Cliente)c.primero();
+						   c.quitarPrimero();
+						
+					   }else {
+						   auxiliar.insertar(c.primero());
+		                   c.quitarPrimero();	 
+					   }
+							   
 				   }
-						   
+				   while(!auxiliar.esVacia()) {
+					   c.insertar(auxiliar.primero());
+					   auxiliar.quitarPrimero();
+				   }
+				   
+			   }catch(DesbordamientoInferior e) {
+				   System.out.println("Error Cola line: 365 CineUdima.java class\nError message: "+ e.getMessage());
 			   }
-			   while(!auxiliar.esVacia()) {
-				   c.insertar(auxiliar.primero());
-				   auxiliar.quitarPrimero();
-			   }
+			
+			   return client;
 			   
-		   }catch(DesbordamientoInferior e) {
-			   //TODO:
 		   }
-		
-		   return client;
-		   
-	   }
-	/*-*********************************************************
-	 * Funciones auxiliares para ayudar en ciertas tareas 
-	 ***********************************************************/
-	
+	   
+  //Getters returns all the data structures use to store all the clients it is use by the handler
 	public Lista getZonaEntrada() {
 		return zonaEntrada;
 	}
@@ -411,76 +415,7 @@ public class CineUdima implements ICine {
 	public Cola getAseo_h() {
 		return aseo_h;
 	}
-	/**
-	 * Busca un cliente en una lista dada y lo retorna
-	 * @param l
-	 * @param nombre
-	 * @return Cliente
-	 */
-	private Cliente sacarClienteDeLista(Lista lista , Cliente cliente) {
-		
-		
-		//TODO:Not sure if it will work 
-		   lista.primero();
-		   boolean encontrado = false;
-		   Cliente delCliente  = null;
-		   while(lista.estaDentro() && !encontrado) {
-			   delCliente = (Cliente)lista.recuperar();
-			   if(delCliente.getNombre().equals(cliente.getNombre())
-				&& delCliente.getPrimerApellido().equals(cliente.getPrimerApellido())
-			    && delCliente.getSegundoApellido().equals(cliente.getSegundoApellido())) {   
-				   encontrado = true;
-				   lista.eliminar(delCliente);
-			   }else {
-				   delCliente = null;
-				   lista.avanzar();
-			   }
-		   }
-		
-		   return delCliente;
-	}
-	
-	/**
-	 * Busca a un cliente y lo saca de la cola dejando la cola<\b>
-	 * en el mismo orden que estaba sin el cliente
-	 * @param c
-	 * @param nombre
-	 * @return Cliente
-	 */
-	private Cliente sacarClienteDeCola(Cola cola, Cliente c) {
-        // cola auxiliar
-		Cola aux = new ColaEnlazada();
-		
-		Cliente cliente = null;
 
-		try {
-			while(!cola.esVacia()) {
-
-				Cliente temp = (Cliente)cola.primero();
-
-				if( temp.getNombre().equals(cliente.getNombre())
-				    &&  temp.getPrimerApellido().equals(cliente.getPrimerApellido())
-				     && temp.getSegundoApellido().equals(cliente.getSegundoApellido())) {
-					cliente = temp;
-					cola.quitarPrimero();
-				}else {
-					aux.insertar(cola.primero());
-					cola.quitarPrimero();
-				}
-			}	
-			while( !aux.esVacia()) {
-				cola.insertar(aux.primero());
-				aux.quitarPrimero();
-			}
-
-		} catch (DesbordamientoInferior e) {
-			//TODO:handle this exception
-			System.out.println(e.getMessage());
-		}
-
-		return cliente;
-
-	}
 
 	
 /**
@@ -489,7 +424,7 @@ public class CineUdima implements ICine {
  * @param nombre
  * @return
  */
-	public boolean isTheSame( Cola cola , Cliente cliente) {
+	private boolean isTheSame( Cola cola , Cliente cliente) {
 
 		boolean estaEnLaCola  = false;
 		Cola aux = new ColaEnlazada();
@@ -513,6 +448,7 @@ public class CineUdima implements ICine {
 			}
 		}catch(DesbordamientoInferior e) {
 
+			System.out.println("Error en cola Line: 445 CineUdima.java\nError message: "+e.getMessage());
 		}
 
 
@@ -522,7 +458,12 @@ public class CineUdima implements ICine {
 
 	
 	
-	/**Busca un cliente en una lista dada**/
+/**
+ * Search a client within a given list
+ * @param l
+ * @param cliente
+ * @return
+ */
 	private boolean isTheSame(Lista l,Cliente cliente) {
 		
 		boolean encontrado = false;
@@ -544,48 +485,7 @@ public class CineUdima implements ICine {
 	    	 return encontrado;
 	}
 	
-	/**
-	 * Search a client inside the projection room by a given name and surname
-	 * @param nameAndSurname
-	 * @return
-	 */
-	public boolean searhClientInProjectionRoom(String nameAndSurname) {
-		  StringTokenizer str = new StringTokenizer(nameAndSurname);
-		   String name = str.nextToken();
-		   String surname = str.nextToken();
-		   String secondSurname = str.nextToken(); 
-		   Pila stack = new PilaVector(10);
-			boolean found = false;
-			try {
-			
-				while(!sala_proyeccion.esVacia()) {
-				
-					if( name.equals(((Cliente)sala_proyeccion.cima()).getNombre())&&
-					    surname.equals(((Cliente)sala_proyeccion.cima()).getPrimerApellido())&&
-					    secondSurname.equals(((Cliente)sala_proyeccion.cima()).getSegundoApellido())){
-						found=true;
-					}
-		
-					
-					
-					stack.apilar(sala_proyeccion.cima());
-					sala_proyeccion.desapilar();
-			
-				}
-				
-				while( !stack.esVacia()) {
-					sala_proyeccion.apilar(stack.cima());
-					stack.desapilar();
-				}
-			
-				
-			} catch (DesbordamientoInferior e) {
-			
-				//TODO:
-			}
-				
-			return found;
-	}
+
 	
 	/**
 	 * Search who is the last client that enters in the projection room
@@ -612,19 +512,15 @@ public class CineUdima implements ICine {
 				
 			} catch (DesbordamientoInferior e) {
 			
-				//TODO:
+				System.out.println("Error en lista Line: 550 CineUdima.java\nError message: "+e.getMessage());
 			}
-				
-			
+					
 			return isFirst;
 		
 	}
 	
-	/**
-	 * Busca si un cliente esta en la sala de proyeccion
-	 * debido a que es un stack tenemos que buscar una 
-	 * forma de buscarlos elementos y volver a ponerlos 
-	 * en su sitio
+	/** 
+	 * Search a client within the projection room stack
 	 * @param c
 	 * @throws DesbordamientoInferior 
 	 */
@@ -642,7 +538,6 @@ public class CineUdima implements ICine {
 				}
 				aux.apilar(sala_proyeccion.cima());
 				sala_proyeccion.desapilar();
-		
 			}
 			
 			while( !aux.esVacia()) {
@@ -651,17 +546,12 @@ public class CineUdima implements ICine {
 			}
 			
 		} catch (DesbordamientoInferior e) {
-		
-			//TODO:
+		    System.out.println("Line:582 CineUdima.java class\nError message: "+e.getMessage());
 		}
 			
-		
-		
 		return encontrado;
-		
 	}
 
-	
 	/**
 	 * Search and delete the client if its found in on of the following areas
 	 * @param nameSurname
@@ -723,7 +613,7 @@ public class CineUdima implements ICine {
 			   }
 			   
 		   }catch(DesbordamientoInferior e) {
-			   //TODO:
+			   System.out.println("Error en cola Line: 651 CineUdima.java\nError message: "+e.getMessage());
 		   }
 		
 		   return borrado;
@@ -757,8 +647,4 @@ public class CineUdima implements ICine {
 		   l.primero();
 		   return borrado;
 	   }
-	
-	
-
-
-}
+}//End of class

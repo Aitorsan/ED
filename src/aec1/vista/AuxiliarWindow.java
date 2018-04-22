@@ -19,7 +19,7 @@ public class AuxiliarWindow extends JDialog {
 	/*Label for the name of the client we want to delete*/
 	JLabel nombre;
 	
-	/*JTextField to introduce the name fo the client we wan to delete*/
+	/*JTextField to introduce the name for the client we wan to delete*/
 	JTextField tNombre;
 	
 	/*confirmation and cancel JButtons*/

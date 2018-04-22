@@ -13,20 +13,26 @@ import java.text.ParseException;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.text.MaskFormatter;
+
+/**
+ * Class for the register window
+ * @author Aitor Sanmartin Ferreira
+ *
+ */
 public class Register_Window extends JDialog {
 
 	//Serial version id
 	private static final long serialVersionUID = 1L;
   
-	//Nombre y apellidos textField size
+	//Name and surname JTextFields
 	private static final int TEXT_WIDTH = 25;
-	//edad textfielsize
+	//age JTextfields size
 	private static final int TEXT_EDAD_WIDTH = 2;
 	/*Window size*/
 	private static final int MIN_WIDTH=500;
 	private static final int MIN_HEIGHT=200;
 	
-	//Boton de aceptar y cancelar
+	//Confirm and cancel JButtons
 	JButton aceptar;
 	JButton cancelar;
 	//JFormattedTextFields
@@ -37,7 +43,7 @@ public class Register_Window extends JDialog {
 	//JCombobox
 	JComboBox<String> sexo;
 	JComboBox<String>prioridad;
-	//JString opciones 
+	//JString options
 	String []opcionSexo;
 	String[] opcionesPrioridad;
 	//JLabels
@@ -48,7 +54,7 @@ public class Register_Window extends JDialog {
 	
 
 	
-	/**Constructor del frame*/
+	/**Constructor */
 	public Register_Window() {
 	    	      
 		setTitle("Registro");      
@@ -63,15 +69,17 @@ public class Register_Window extends JDialog {
 	     
 	}
 	
-	/**Inicializa los componentes de la ventana*/
+	/**
+	 * Method to initialize the components
+	 */
 	private void initComponents() {
 		
-		/* Configuracion del layout principal de la ventana */
+		/* Main layout configuration*/
 		Container windowPane = getContentPane();
 		SpringLayout springLayout = new SpringLayout();
 		windowPane.setLayout(springLayout);
 		
-		/* Mascara para la edad*/
+		/* Mask format for the age*/
 		try {
 			mascaraEdad = new MaskFormatter("##");//well we assume there is nobody 100 years old or more
 		
@@ -84,16 +92,16 @@ public class Register_Window extends JDialog {
 			JOptionPane.showMessageDialog(this, "Error inicializar la mascara: "+e.getMessage(), 
 					"Error",JOptionPane.ERROR_MESSAGE);
 		}
-		//Labels donde se indica el nombre del campo
+		//JLables 
 		 l_nombreApellidos = new  JLabel ("Nombre y Apellidos");
 		 l_edad= new  JLabel ("Edad");
 		 l_sexo= new  JLabel ("Sexo");
 		 l_prioridad= new  JLabel("Prioridad");
 		 
-		//TextField para nombre y apellidos
+		//TextField name and surnames
 		 nombreYApellidos = new JTextField(TEXT_WIDTH);
 		 
-		 //JCombobox opciones	
+		 //JCombobox options
 		 opcionSexo = new String[] {"Hombre","Mujer"};	
 		 opcionesPrioridad = new String[] {"Ninguna","Discapacitado/a","Embarazada","Tercera Edad"};
 		 
@@ -105,15 +113,14 @@ public class Register_Window extends JDialog {
 		 aceptar = new JButton("Aceptar");
 		 cancelar = new JButton("Cancelar");
 		
-		//Configuracion de la posicion de los diferentes elementos en la ventana
+		//Positioning configuration
 		
-		//Lables
+		//JLabels
 		springLayout.putConstraint(SpringLayout.WEST,  l_nombreApellidos, 10, SpringLayout.WEST,this);
 		springLayout.putConstraint(SpringLayout.NORTH, l_nombreApellidos, 10, SpringLayout.NORTH,this);
 		
 		springLayout.putConstraint(SpringLayout.WEST,  l_edad, 10, SpringLayout.WEST,this);
 		springLayout.putConstraint(SpringLayout.NORTH, l_edad, 10, SpringLayout.SOUTH,l_nombreApellidos);
-		
 		
 		springLayout.putConstraint(SpringLayout.WEST,  l_sexo, 10, SpringLayout.WEST,this);
 		springLayout.putConstraint(SpringLayout.NORTH, l_sexo, 10, SpringLayout.SOUTH,l_edad);
@@ -125,16 +132,16 @@ public class Register_Window extends JDialog {
 		springLayout.putConstraint(SpringLayout.WEST, nombreYApellidos, 10, SpringLayout.EAST,l_nombreApellidos);
 		springLayout.putConstraint(SpringLayout.NORTH, nombreYApellidos, 5, SpringLayout.NORTH,this);
 	   
-		//Formatted Text fiel para la edad
+		//Formatted Text fields for the age
 		springLayout.putConstraint(SpringLayout.WEST, edad, 104, SpringLayout.EAST,l_edad);
 		springLayout.putConstraint(SpringLayout.NORTH,edad, 2, SpringLayout.SOUTH, nombreYApellidos);  
+		
 		//ComboBoxes
 		springLayout.putConstraint(SpringLayout.WEST, sexo, 104, SpringLayout.EAST,l_sexo);
 		springLayout.putConstraint(SpringLayout.NORTH,sexo, 2, SpringLayout.SOUTH, edad); 
 		
 		springLayout.putConstraint(SpringLayout.WEST, prioridad, 77, SpringLayout.EAST,l_prioridad);
 		springLayout.putConstraint(SpringLayout.NORTH,prioridad, 2, SpringLayout.SOUTH,sexo); 
-		
 		
 		//JButtons
 		springLayout.putConstraint(SpringLayout.EAST, aceptar, MIN_WIDTH/2, SpringLayout.WEST,this);
@@ -158,49 +165,53 @@ public class Register_Window extends JDialog {
 	}
 
 	/**
-	 * @return el boton de aceptar
+	 * @return the confirm operation button
 	 */
 	public JButton getAceptar() {
 		return aceptar;
 	}
 
 	/**
-	 * @return el boton de cancelar
+	 * @return abort operation button
 	 */
 	public JButton getCancelar() {
 		return cancelar;
 	}
 
 	/**
-	 * @return EL textField donde el usuario introduce el nombre y apellidos
+	 * Getter that returns the textField containing the name and surname of a client
+	 * @return nombreYapellidos
 	 */
 	public JTextField getNombreYApellidosTextField() {
 		return nombreYApellidos;
 	}
 
 	/**
-	 * @return La edad del cliente registrado
+	 * Getter that gets the age of the client
+	 * @return edad
 	 */
 	public int getEdad() {
 		return Integer.parseInt(edad.getText());
 	}
 
 	/**
-	 * @return retorna informacion sobre el sexo del cliente
+	 * Getter that returns the gender of a client
+	 * @return Gender
 	 */
 	public String getSexo() {
 		return sexo.getSelectedItem().toString();
 	}
 
 	/**
-	 * @return retorna informacion sobre si el cliente tiene o no algun tipo de prioridad
+	 * Getter that returns the level of priority of the client
+	 * @return prioridad
 	 */
 	public String getPrioridad() {
 		return prioridad.getSelectedItem().toString();
 	}
 
 	/**
-	 * resetea los campos de informacion de la ventana
+	 * reset text fields
 	 */
 	public void resetFields() {	
 		nombreYApellidos.setText("");
