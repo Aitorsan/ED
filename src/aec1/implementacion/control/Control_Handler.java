@@ -418,8 +418,16 @@ public class Control_Handler {
 					nuevo.setPrimerApellido(token.nextToken().toLowerCase());
 					nuevo.setSegundoApellido(token.nextToken().toLowerCase());
 					nuevo.setEdad(Integer.valueOf(token.nextToken()));
-					nuevo.setSexo(token.nextToken());
-					nuevo.setPrioridad(token.nextToken());
+					String sex = token.nextToken();
+					String priority = token.nextToken();
+					
+					if( sex.equals("Hombre") && priority.equals("Embarazada"))
+					{
+						throw new Exception("Los hombres no pueden elegir la opcion Embarazada");
+					}
+					
+					nuevo.setSexo(sex);
+					nuevo.setPrioridad(priority);
 
 					if(cine.buscarClienteEnCine(nuevo)) {
 						JOptionPane.showMessageDialog(registerWindow, "El cliente ya esta registrado", "Informacion", JOptionPane.INFORMATION_MESSAGE);

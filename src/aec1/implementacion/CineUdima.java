@@ -1,7 +1,6 @@
 package aec1.implementacion;
 
 import java.util.StringTokenizer;
-
 import aec1.especificacion.ICine;
 import listas.*;
 import colas.*;
@@ -138,7 +137,6 @@ public class CineUdima implements ICine {
 		if(client == null) {
             client = search(aseo_h,nameSurname);	
         }
-		
 		if( client == null) {
 			client = search(aseo_m,nameSurname);
 		}
@@ -252,7 +250,13 @@ public class CineUdima implements ICine {
 					     throw new Exception("El cliente es un hombre no puede entrar en el aseo de mujeres, el cliente ha sido movido al aseo correspondiente");
 				  }  
 			  }else if(where.equals("Sala cine")){
-				  sala_proyeccion.apilar(c);
+				  int num = contar_clientes_sala();
+				  if(num <10) {
+					  sala_proyeccion.apilar(c);
+				  }else {
+					  zonaProyeccion.insertar(c);
+					  throw new Exception ("La sala esta llena");
+				  }
 			  }else if(where.equals("Salida")) {
 				  salida.insertar(c);
 			  }
@@ -677,4 +681,35 @@ public class CineUdima implements ICine {
 		   l.primero();
 		   return borrado;
 	   }
+	   
+	   
+	   /**
+	    * Because our data structure do not have a counter to know how many elements has inside.
+	    * We have to make a helper function to compute that.
+	    * @return
+	    */
+	  private int contar_clientes_sala() {
+		  
+		  Pila aux = new PilaVector(10); 
+		int contador = 0;
+			try {
+			
+				while(!sala_proyeccion.esVacia()) {
+				
+					++contador;
+					aux.apilar(sala_proyeccion.cima());
+					sala_proyeccion.desapilar();
+				}
+				
+				while( !aux.esVacia()) {
+					sala_proyeccion.apilar(aux.cima());
+					aux.desapilar();
+				}
+				
+			} catch (DesbordamientoInferior e) {
+			    System.out.println("Line:714 CineUdima.java class\nError message: "+e.getMessage());
+			}
+				
+		  return contador;
+	  }
 }//End of class
