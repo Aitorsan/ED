@@ -1,11 +1,11 @@
-package pilas_exp;
+package asf.data_structures.stacks;
+import asf.data_structures.nodes.Node;
 import excepciones.DesbordamientoInferior;
-import nodos_exp.Nodo_exp;
 
 
 public class PilaEnlazada_exp<T> implements Pila_exp<T> {
 	
-	private Nodo_exp< T> cima;
+	private Node< T> cima;
 	private Integer numElementos;
 	public PilaEnlazada_exp() {
 		cima = null;
@@ -15,8 +15,8 @@ public class PilaEnlazada_exp<T> implements Pila_exp<T> {
 	@Override
 	public void apilar(T elemento) {
 		
-		Nodo_exp<T> nodo= new Nodo_exp<T>(elemento);
-		nodo.setEnlace(cima);
+		Node<T> nodo= new Node<T>(elemento);
+		nodo.set_next(cima);
 		cima = nodo;
 		++numElementos;
 	}
@@ -26,7 +26,7 @@ public class PilaEnlazada_exp<T> implements Pila_exp<T> {
 		  if( esVacia()) {
 			  throw new DesbordamientoInferior("la pila ya no contiene mas elementos, esta vacia");
 		  }
-           cima = cima.getEnlace();
+           cima = cima.get_next();
            --numElementos;
 		
 	}
@@ -36,7 +36,7 @@ public class PilaEnlazada_exp<T> implements Pila_exp<T> {
 		if(esVacia()) {
 			throw new DesbordamientoInferior("La pila esta vacia");
 		}
-		return cima.getElemento();
+		return cima.getElement();
 	}
 
 	@Override

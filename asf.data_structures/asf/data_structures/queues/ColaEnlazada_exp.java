@@ -1,11 +1,11 @@
-package colas_exp;
+package asf.data_structures.queues;
+import asf.data_structures.nodes.Node;
 import excepciones.DesbordamientoInferior;
-import nodos_exp.Nodo_exp;
 
 public class ColaEnlazada_exp<T> implements Cola_exp<T> {
 
-	private Nodo_exp<T> primero;
-	private Nodo_exp<T> ultimo;
+	private Node<T> primero;
+	private Node<T> ultimo;
 	private int numElementos;
 	/**
 	 * Constructor creates an empty Queue
@@ -19,9 +19,9 @@ public class ColaEnlazada_exp<T> implements Cola_exp<T> {
 	@Override
 	public void insertar(T elemento) {
 		
-		Nodo_exp <T> nuevo = new Nodo_exp<T>(elemento);
+		Node <T> nuevo = new Node<T>(elemento);
 		
-		nuevo.setEnlace(null);
+		nuevo.set_next(null);
        
 		if( primero == null) {
         	    
@@ -29,7 +29,7 @@ public class ColaEnlazada_exp<T> implements Cola_exp<T> {
         	     ultimo = nuevo;
          }else {
         	 
-        	 ultimo.setEnlace(nuevo);
+        	 ultimo.set_next(nuevo);
         	 ultimo = nuevo;
         	 
          }
@@ -43,7 +43,7 @@ public class ColaEnlazada_exp<T> implements Cola_exp<T> {
         	    throw new DesbordamientoInferior("La cola esta vacia, imposible extraer datos");
           }
 
-		return primero.getElemento();
+		return primero.getElement();
 	}
 
 	@Override
@@ -52,9 +52,9 @@ public class ColaEnlazada_exp<T> implements Cola_exp<T> {
 			throw new DesbordamientoInferior("la cola no contiene mas elementos, imposible extraer datos");
 		}
 		
-	     Nodo_exp<T> temp = primero;
-	     primero = primero.getEnlace();
-	     temp.setEnlace(null);
+	     Node<T> temp = primero;
+	     primero = primero.get_next();
+	     temp.set_next(null);
 	     //delete temp;->for c++
 	     
 	     if( primero ==  null) {
@@ -69,6 +69,43 @@ public class ColaEnlazada_exp<T> implements Cola_exp<T> {
 	public boolean esVacia() {
 		
 		return (primero == null);
+	}
+	
+    /**
+     * Find an element in the list
+     * @param element
+     * @return true if the element is inside the list false if it's empty or not found.
+     */
+	public  boolean buscar  ( T element) {
+		
+		if( esVacia()) {
+			return false;
+		}else {
+			return buscar(primero,element);
+		}
+		
+	}
+	
+	/**
+	 * Find the element recursively
+	 * @param node
+	 * @param element
+	 * @return
+	 */
+	private boolean buscar( Node<T> node,T element) {
+		
+		
+		if( node != null) {
+			
+			if( node.getElement().equals(element)) {
+		
+				 return true;
+			}else {
+				return buscar( node.get_next(),element);
+			}
+		}else {
+			return false;
+		}
 	}
 
 }

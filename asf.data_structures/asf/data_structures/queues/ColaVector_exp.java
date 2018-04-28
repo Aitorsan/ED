@@ -1,4 +1,4 @@
-package colas_exp;
+package asf.data_structures.queues;
 
 import excepciones.DesbordamientoInferior;
 /**

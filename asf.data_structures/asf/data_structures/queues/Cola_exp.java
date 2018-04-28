@@ -1,4 +1,4 @@
-package colas_exp;
+package asf.data_structures.queues;
 import excepciones.DesbordamientoInferior;
 public interface Cola_exp<T>{
 	
@@ -14,5 +14,6 @@ public interface Cola_exp<T>{
 	
 	/**Return whether the Queue is empty or not*/
 	public boolean esVacia();
+	
 
 }

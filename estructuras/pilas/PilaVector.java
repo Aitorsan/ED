@@ -36,7 +36,7 @@ public class PilaVector implements Pila{
 		
 	}
 
-	/**Elimina el último elemento de la pila que se insertó*/
+	/**Elimina el ultimo elemento de la pila que se insertó*/
 	@Override
 	public void desapilar()throws DesbordamientoInferior {
 	

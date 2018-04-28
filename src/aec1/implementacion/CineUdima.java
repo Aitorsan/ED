@@ -22,7 +22,6 @@ public class CineUdima implements ICine {
 	public static final char SALIDA        = 0b00001010;	
 	public static final char LISTA_ZONA_PROYECCION = 0b00001011;
 	public static final char ALL           = 0b00001111;
-
     // Lists
 	Lista zonaEntrada;
 	Lista zonaProyeccion;
@@ -42,7 +41,6 @@ public class CineUdima implements ICine {
 	Cola aseo_h;
 	Pila sala_proyeccion;
     Lista salida;
-	
 	
 /**
  * CindeUdima Constructor
@@ -102,16 +100,15 @@ public class CineUdima implements ICine {
              
 	}
 	
-	
 	/**
 	 * Search for a client within the cinema 
 	 * @param nameSurname
 	 * @return If a client is found return that client object
 	 */
 	public Cliente buscarClienteEnCine(String nameSurname) {
-	
 
-		    Cliente client = search( zonaEntrada,nameSurname);
+		    
+		Cliente client = search( zonaEntrada,nameSurname);
 
 		if( client == null) 
 			client =search( zonaProyeccion,nameSurname);
@@ -144,16 +141,14 @@ public class CineUdima implements ICine {
 		 return client;
 	}
 	
-	
 	/**
 	 * Search for a client within the cinema 
 	 * @param nameSurname
 	 * @return If a client is found return that client object
 	 */
 	public Cliente buscarClienteEnCineDesdeEntrada(String nameSurname) {
-	
-
-		    Cliente client = search( zonaEntrada,nameSurname);
+		   
+		Cliente client = search( zonaEntrada,nameSurname);
 			
 		if( client == null) 
 			client = search( taquillas_ventanilla_uno,nameSurname);
@@ -261,7 +256,6 @@ public class CineUdima implements ICine {
 				  salida.insertar(c);
 			  }
 		}  
-
 		  
 	  }
 	  
@@ -286,8 +280,6 @@ public class CineUdima implements ICine {
 						    secondSurname.equals(((Cliente)sala_proyeccion.cima()).getSegundoApellido())){
 							found=true;
 						}
-			
-						
 						
 						stack.apilar(sala_proyeccion.cima());
 						sala_proyeccion.desapilar();
@@ -307,9 +299,6 @@ public class CineUdima implements ICine {
 					
 				return found;
 		}
-
-
-	
 	  
 	/*-*********************************************************
 	 * Auxiliar methods to help the class to make certain task
@@ -370,7 +359,6 @@ public class CineUdima implements ICine {
 			
 			return counter;
 		}
-		 
 		 
 		 /**
 		    * Find and delete a client from the queue
@@ -449,8 +437,6 @@ public class CineUdima implements ICine {
 	public Cola getAseo_h() {
 		return aseo_h;
 	}
-
-
 	
 /**
  * Busca un cliente en una Cola dada
@@ -485,13 +471,9 @@ public class CineUdima implements ICine {
 			System.out.println("Error en cola Line: 445 CineUdima.java\nError message: "+e.getMessage());
 		}
 
-
 		return estaEnLaCola;
-
 	}
 
-	
-	
 /**
  * Search a client within a given list
  * @param l
@@ -518,8 +500,6 @@ public class CineUdima implements ICine {
 	 
 	    	 return encontrado;
 	}
-	
-
 	
 	/**
 	 * Search who is the last client that enters in the projection room
@@ -550,7 +530,6 @@ public class CineUdima implements ICine {
 			}
 					
 			return isFirst;
-		
 	}
 	
 	/** 
@@ -651,7 +630,6 @@ public class CineUdima implements ICine {
 		   }
 		
 		   return borrado;
-		   
 	   }
 	   
 	   /**

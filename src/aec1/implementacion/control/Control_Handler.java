@@ -218,9 +218,7 @@ public class Control_Handler {
 
 					window.actualizarInformacion(cine, CineUdima.ALL);
 				}		
-
 			}
-
 
 			//next comercio JButton
 			if(event.getSource() == window.getSiguiente_comercio_boton()) {
@@ -240,7 +238,6 @@ public class Control_Handler {
 					window.actualizarInformacion(cine, CineUdima.ALL);
 				}
 			}
-
 
 			//--------------------
 			// PROJECTION AREA
@@ -267,8 +264,6 @@ public class Control_Handler {
 				}finally {
 					window.actualizarInformacion(cine, CineUdima.ALL);
 				}
-
-
 			}
 
 			//next women toilets
@@ -290,8 +285,7 @@ public class Control_Handler {
 				}
 			}
 
-
-			//Salida JButton
+			//Exit JButton
 			if( event.getSource() == window.getSiguiente_salida_boton() ) {
 				String infoCliente = "";
 				cine.getSalida().primero();
@@ -355,7 +349,6 @@ public class Control_Handler {
 
 					}
 
-
 					cl = cine.buscarClienteEnCine(moveWindow_proyeccion.getTextNombre());
 					if(cl != null) {
 						cine.move(cl,moveWindow_proyeccion.getSelectedItem() );	
@@ -371,7 +364,6 @@ public class Control_Handler {
 				}
 
 			}
-
 
 			//***********************************************************
 			//               RegisterWindow JButtons
@@ -409,7 +401,6 @@ public class Control_Handler {
 					info+=":";
 					info+=registerWindow.getPrioridad();
 
-
 					StringTokenizer token = new StringTokenizer(info,":");
 
 					Cliente nuevo = new Cliente();
@@ -440,7 +431,6 @@ public class Control_Handler {
 
 					}
 
-
 				}catch(NumberFormatException e) {
 					JOptionPane.showMessageDialog(registerWindow, "El campo Edad esta vacio", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 
@@ -450,7 +440,6 @@ public class Control_Handler {
 				}
 
 			}
-
 
 			if(event.getSource() == registerWindow.getCancelar()) {
 
@@ -486,7 +475,6 @@ public class Control_Handler {
 			//************************************************************/
 			if( event.getSource() == moveWindow_entrada.getConfirmationButton()) {
 
-
 				try {
 
 					Cliente client = null;
@@ -518,10 +506,8 @@ public class Control_Handler {
 			if( event.getSource() == moveWindow_entrada.getCancelButton()) {
 				moveWindow_entrada.resetTextFields();
 			}
-
 		}//method end
-
 	}//End of nested class actionListener
-
 	//End of Control_handler class
+	
 }
