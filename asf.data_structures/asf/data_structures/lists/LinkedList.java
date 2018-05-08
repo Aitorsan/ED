@@ -1,5 +1,4 @@
 package asf.data_structures.lists;
-import java.util.Iterator;
 
 import asf.data_structures.nodes.Node;
 import asf.exceptions.OutOfBoundsException;
@@ -25,8 +24,7 @@ public class LinkedList <T> {
 		
 		return (m_head == null);
 	}
-	
-	
+
 	/**
 	 * Insert an element at the end of the list
 	 * @param elemento
@@ -42,11 +40,8 @@ public class LinkedList <T> {
 			
 			 m_tail.set_next(nuevo);
 			 m_tail = nuevo;
-			
-			
 		}
 		++m_size;
-      
 	}
 	
 	/**
@@ -71,9 +66,6 @@ public class LinkedList <T> {
 			
 			m_iterator.insert_element(element);
 		}
-		
-		
-		
 	}
 	
 	/**
@@ -83,7 +75,6 @@ public class LinkedList <T> {
 	public int get_size() {
 		return m_size;
 	}
-	
 	
 	/**
 	 * search for a given element within the list
@@ -98,7 +89,6 @@ public class LinkedList <T> {
 		else {
 			
 			boolean value =  search( m_head,element);
-	
 			return value;
 		}	
 		
@@ -123,11 +113,8 @@ public class LinkedList <T> {
 			}
 					
 		}else {
-			return false;
-			
+			return false;	
 		}
-		
-
 	}
 	
 	/**
@@ -150,8 +137,6 @@ public class LinkedList <T> {
 			++counter;
 			
 		}
-		
-		
 		return m_iterator.getElement();
 				
 	}
@@ -218,16 +203,10 @@ public class LinkedList <T> {
         		trail = null;
         		m_iterator = m_head;
         	}else {
-        		
-        		
+ 
         		System.out.println("the element is not in the list");
         	}
-        	
-        	
     	}
-    		
-      	
-    	
     }
 	/**
 	 * Print all the elements contained in the list	

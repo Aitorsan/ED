@@ -32,7 +32,6 @@ public class NodoDoble {
 		this.elemento = elemento;
 	}
 	
-
 	/**Devuelve el enlace nodo**/
 	public NodoDoble getSiguiente() {
 		return this.siguiente;
