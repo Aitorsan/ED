@@ -18,7 +18,6 @@ public class Casilla {
 	}
 	
 	//Metodos accesores
-
 	public int getDistancia() {
 		return distancia;
 	}

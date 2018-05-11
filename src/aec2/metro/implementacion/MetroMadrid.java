@@ -16,6 +16,7 @@ public class MetroMadrid implements IMetro {
 		
 	}
 
+	
 	@Override
 	public TuplaCaminoValor caminoMasRapido(Estacion estacionOrigen, Estacion estacionDestino) {
 		// TODO Auto-generated method stub
