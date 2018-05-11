@@ -9,6 +9,7 @@ public class Monticulo implements ColaPrioridad {
 	 * cada nodo en la posicion x tiene sus hijos en x*2 y x*2+1, y el nodo raiz
 	 * esta situado en la posicion uno
 	 */
+	@SuppressWarnings("rawtypes")
 	private Comparable[] datos;
 	
 	/**Numero de elementos del monticulo**/
@@ -22,7 +23,7 @@ public class Monticulo implements ColaPrioridad {
 	}
 	
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void insertar(Comparable elemento) {
 
