@@ -31,7 +31,20 @@ public class TuplaCaminoValor {
 
 	@Override
 	public String toString() {
-		return "TuplaCaminoValor [camino=" + camino + ", valor=" + valor + "]";
+		String caminos= "";
+		camino.primero();
+		if( !camino.estaDentro()) {
+			caminos +="no existe camino";
+		}else {
+			
+			while(camino.estaDentro()) {
+				caminos+= camino.recuperar();
+				camino.avanzar();
+			}
+		}
+		camino.primero();
+		
+		return "TuplaCaminoValor [camino=" + caminos + ", valor=" + valor + "]";
 	}
 
 }

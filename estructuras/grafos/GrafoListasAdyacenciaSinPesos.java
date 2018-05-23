@@ -19,9 +19,9 @@ public class GrafoListasAdyacenciaSinPesos extends GrafoListasAdyacencia{
 	
 	
 	/**Operacion no soportada en un grafo sin pesos**/
-	
-	public void insertarArista(Object origen,Object destino, int coste)throws OperacionIncorrecta{
-		throw new OperacionIncorrecta("Esta operacion no se puede aplicar con grafos sin pesos");
+
+   public void insertarArista(Object origen,Object destino, int coste)throws OperacionIncorrecta{
+	throw new OperacionIncorrecta("Esta operacion no se puede aplicar con grafos sin pesos");
 	}
 	
 	

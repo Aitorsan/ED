@@ -63,7 +63,7 @@ public class ListaEnlazada implements Lista{
 		if(nodoIterador.getEnlace() != null) {
 			actual = nodoIterador;
 			nodoIterador = nodoIterador.getEnlace();
-	//TODO:		
+	
 			actual.setEnlace(actual.getEnlace().getEnlace());
 		     nodoIterador.setEnlace(null);
 		}
@@ -82,7 +82,6 @@ public class ListaEnlazada implements Lista{
 		while( nodoIterador!= null && !nodoIterador.getElemento().equals(elemento)) {
 			nodoIterador = nodoIterador.getEnlace();
 		}
-		
 		//Si se encuentra el nodo se altera la posicion actual
 		if( nodoIterador != null) {
 			actual = nodoIterador;
@@ -90,7 +89,6 @@ public class ListaEnlazada implements Lista{
 		}else {
 			return false;
 		}
-		
 	}
 
    /**
@@ -107,8 +105,6 @@ public class ListaEnlazada implements Lista{
 	public void primero() {
         /*La posicion actual se situa en el nodo siguiente a la cabecera, el primero de la lista*/
 		actual = cabecera.getEnlace();
-		
-		
 	}
 	/**Avanza la posicion actual**/
 	@Override
@@ -118,10 +114,8 @@ public class ListaEnlazada implements Lista{
 		if( estaDentro()) {
 			actual = actual.getEnlace();
 		}else {
-			System.out.println("No se puede avanzar la poscion atual por que no esta dentro de la lista");
-			
+			System.out.println("No se puede avanzar la poscion atual por que no esta dentro de la lista");	
 		}
-		
 	}
 
 /**Determina si la posicion actual es una poscion valida. De esta manera , se puede comprobar si se ha llegado 
@@ -149,19 +143,35 @@ public class ListaEnlazada implements Lista{
 	/**Muestra por pantalla la lista de objectos**/
 	public void imprimir() {
 		
-		Nodo nodoIterador = cabecera;
+		Nodo nodoIterador = cabecera.getEnlace();
 		System.out.println("Lista:");
 		
 		while(nodoIterador != null) {
 			System.out.print("["+nodoIterador.getElemento()+"]->");
 			nodoIterador = nodoIterador.getEnlace();
-	
 		}
 		System.out.println();
 
 	}
 
-	
+
+	/*Sobreescribimos el metodo toString*/
+	@Override
+	public String toString() {
+		
+		this.primero();
+		Nodo nodoIterador = actual;
+		String elementos ="";
+		
+		while(nodoIterador != null) {
+			elementos+= nodoIterador.getElemento();
+			if(nodoIterador.getEnlace() != null) {
+				elementos+=", ";
+			}
+			nodoIterador = nodoIterador.getEnlace();
+		}
+		return String.format("ListaEnlazada [ %s ]",elementos);
+	}
 
 
 }

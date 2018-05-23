@@ -36,6 +36,4 @@ public class Arista {
 		this.destino = destino;
 	}
 	
-	
-	
 }

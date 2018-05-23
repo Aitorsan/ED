@@ -1,6 +1,6 @@
 package grafos;
 
-/** Casilla de la tabal de distancias necesaria para la busqueda de caminos minimos.
+/** Casilla de la tabla de distancias necesaria para la busqueda de caminos minimos.
  *  Contiene un numero con la distancia y un enlace al anterior nodo.
  */
 public class Casilla {

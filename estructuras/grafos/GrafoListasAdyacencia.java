@@ -38,14 +38,15 @@ public class GrafoListasAdyacencia implements Grafo{
 	@Override
 	public void insertarArista(Object origen, Object destino, int coste) throws OperacionIncorrecta {
 		//se comprueba que existan los nodos
-		if( tablaNodos.get(origen) == null || tablaNodos.get(destino)== null){
+		if( tablaNodos.get(origen) == null || tablaNodos.get(destino)==null){
 			throw new OperacionIncorrecta("No se puede insertar una arista entre nodos inexistentes");
 		}
+			
+			//Se inserta la arista
+			ListaEnlazada listaAdyacencia = tablaNodos.get(origen);
+			Arista arista = new Arista(coste,destino);
+			listaAdyacencia.insertar(arista);
 		
-		//Se inserta la arista
-		ListaEnlazada listaAdyacencia = tablaNodos.get(origen);
-		Arista arista = new Arista(coste,destino);
-		listaAdyacencia.insertar(arista);
 
 	}
 
@@ -73,17 +74,17 @@ public class GrafoListasAdyacencia implements Grafo{
 		while(iterador.hasNext()) {
 
 			Entry<Object,ListaEnlazada>entrada= iterador.next();
-			System.out.println("Nodo: "+ entrada.getKey());
+			System.out.print("Nodo: "+ entrada.getKey()+". ");
 
 			ListaEnlazada listaAdyacencia = entrada.getValue();
-
+            System.out.print("Lista adyacencia: ");
 			listaAdyacencia.primero();
 
 			while(listaAdyacencia.estaDentro()) {
 
 				Arista arista =(Arista) listaAdyacencia.recuperar();
 
-				System.out.print("("+arista.getCoste()+","+arista.getDestino()+")");
+				System.out.print("("+arista.getCoste()+","+arista.getDestino()+") ");
 				listaAdyacencia.avanzar();
 
 			}
@@ -129,6 +130,7 @@ public class GrafoListasAdyacencia implements Grafo{
 	    camino = new Camino(origen,0);
 		
 		ColaPrioridad cola = new Monticulo(tablaNodos.keySet().size()*tablaNodos.keySet().size());
+		cola.insertar(camino);
 		
 		//Mientras la cola no se quede vacia, se analizan los nodos
 		
@@ -180,7 +182,7 @@ public class GrafoListasAdyacencia implements Grafo{
 
 
     /**Busca el camino minimo entre un nodo origen y el nodo destino, y devuelve una lista con
-     * los nodos del cmaino.Para ello,usa el metodo de buscar todos los caminos. En caso de no
+     * los nodos del camino.Para ello,usa el metodo de buscar todos los caminos. En caso de no
      * existir un camino, se duevuelve nulo. */
 
 	public ListaEnlazada dijkstra(Object origen,Object destino) {
@@ -191,7 +193,7 @@ public class GrafoListasAdyacencia implements Grafo{
 		//se obtiene la tabla de distancias llamando al metodo correspondiente
 		HashMap <Object, CasillaDijkstra> distancias = dijkstra(origen);
 		
-		//Se comprueba que se ha obtenidoun camino. De lo contrario, se devuelve nulo
+		//Se comprueba que se ha obtenido un camino. De lo contrario, se devuelve nulo
 		if(distancias.get(destino).getDistancia() == Integer.MAX_VALUE) {
 			return null;
 		}
