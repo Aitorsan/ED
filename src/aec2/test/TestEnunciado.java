@@ -92,7 +92,7 @@ public class TestEnunciado {
 	
 		((MetroMadrid)metro).imprimirRed();
 		
-		System.out.println("\n\n----------------- TEST ELIMINACION UNA CONEXION ( de la estacion T) -----------------------\nn");
+		System.out.println("\n\n----------------- TEST ELIMINACION UNA CONEXION ( de la estacion T) -----------------------\n\n");
 		
 		System.out.println("\nGrafo antes de la eliminacion de la conexion de T con G, (40,G):\n");
 		((MetroMadrid)metro).imprimirRed();

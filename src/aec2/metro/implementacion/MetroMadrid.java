@@ -127,10 +127,19 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 	@Override
 	public void eliminarConexion(Estacion estacionOrigen, Estacion estacionDestino) {
 		
-		ListaEnlazada lista = obtenerAdyacentes(estacionOrigen);
-		lista.eliminar(estacionDestino);
-		tablaNodos.put(estacionOrigen, lista);
+                   
+		ListaEnlazada listaConexionOrigen = tablaNodos.get(estacionOrigen);
 		
+	     listaConexionOrigen.primero();
+	     while(listaConexionOrigen.estaDentro()) {
+	    	 Arista actual = (Arista)listaConexionOrigen.recuperar();
+	    	 if( actual.getDestino() == estacionDestino) {
+	    		 listaConexionOrigen.eliminar(actual);
+	    	 }
+	    	 
+	    	 listaConexionOrigen.avanzar();
+	     }
+	     
 	}
 
 	/**Metodo que elimina una estacion de la red de Metro y, por consiguiente, todas
