@@ -89,6 +89,7 @@ public class GrafoListasAdyacencia implements Grafo{
 
 			}
 			System.out.println(".");
+			listaAdyacencia.primero();
 		}
 	}
 
@@ -167,7 +168,7 @@ public class GrafoListasAdyacencia implements Grafo{
 						}
 						adyacentes.avanzar();
 					}
-					
+					adyacentes.primero();//TOODO:AQUI
 				}
 				
 			}catch(DesbordamientoInferior e) {

@@ -13,7 +13,11 @@ import listas.ListaEnlazada;
 import pilas.Pila;
 import pilas.PilaEnlazada;
 
-
+/**
+ * Class MetroMadrid, esta clase representa el metro de madrid mediante el uso de un grafo Dirigido con pesos.
+ * @author Aitor sanmartin ferreira
+ *
+ */
 public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 
 	/**Constructor de la red MetroMadrid**/
@@ -23,14 +27,17 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 	}
 	
 	@Override
-	/**Metodo que inserta una nueva estacion en la red del metro*/
+	/***********************************************************************************
+	 * Metodo que inserta una nueva estacion en la red del metro
+	 ***********************************************************************************/
 	public void anadirEstacion(Estacion estacion) {
 		insertarNodo(estacion);		
 	}
 
-	/**Metodo que añade una conexion entre dos estacioens existentes en la red de metro
+	/***********************************************************************************
+	 * Metodo que añade una conexion entre dos estacioens existentes en la red de metro
 	 * indicando el tiempo empeleado en ir de la estacion origen al destino
-	 */
+	 ***********************************************************************************/
 	@Override
 	public void anadirConexion(Estacion estacionOrigen, Estacion estacionDestino, int tiempo) {
 		
@@ -42,40 +49,29 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 		
 	}
 
-	/**Metodo que devuelve el camino mas rapido (menor tiempo) para ir desde la estacion origen
-	 * a la estacion destino y el tiempo empleado en el trayecto.
-	 */
+	/***********************************************************************************
+	 * Metodo que devuelve el camino mas rapido (menor tiempo) para ir desde 
+	 * la estacion origen a la estacion destino y el tiempo empleado en el trayecto.
+	 ***********************************************************************************/
 	@Override
 	public TuplaCaminoValor caminoMasRapido(Estacion estacionOrigen, Estacion estacionDestino) {
 
-		//para poder conseguir el tiempo total del camino mas rapido
-		HashMap<Object, CasillaDijkstra> caminos = dijkstra(estacionOrigen);
+		/*Pasos:
+		 * 1. primero llamamos al metodo dikstra que nos devuelve una lista con los caminos que hay que recorrer con el minimo coste en grafos con pesos
+		 *    acto seguido se pasa como primer parametro para la creacion de una nueva tublaCaminoValor.
+		 * 2.Para saber el tiempo que necesitamos tenemos que llamar al metodo que nos devuelve una tabla con todas las distancias desde
+		 *   la estacion origen a todos los puntos del grafo. Despues de esto accedemos a la distancia que nos interesa que es la de la
+		 *   estacion destino.
+		 * 3. retornamos la nueva tuplaCaminoValor, como no necesitamos hacer nada con el objeto dentro de la funcion lo creamos in- place y lo retornamos
+		 */
+        return new TuplaCaminoValor(dijkstra(estacionOrigen,estacionDestino),dijkstra(estacionOrigen).get(estacionDestino).getDistancia());
 
-		//para saber cual es el camino o estaciones que debemos pasar hasta llegar a nuestro destino
-		ListaEnlazada estaciones =  dijkstra(estacionOrigen, estacionDestino);
-
-		//tiempo total en recorrer el camino
-		int tiempoTotal = 0;
-		
-		//Si existe la estacion en la lista cogemos su distancia y la sumamos
-		if(caminos.containsKey(estacionOrigen)) {				
-			
-			tiempoTotal = caminos.get(estacionDestino).getDistancia();
-		}
-
-
-		//dejamos la posicion del nodo de la lista en la cabeza 
-        estaciones.primero();
-        
-        TuplaCaminoValor caminoMasRapido = new TuplaCaminoValor(estaciones,tiempoTotal);
-
-		return caminoMasRapido;
 	}
 
-	/**Metodo que determina y devuelve le camino con menso estaciones entre dos estaciones 
+	/**************************************************************************************
+	 * Metodo que determina y devuelve le camino con menso estaciones entre dos estaciones 
 	 * dadas, ademas del numero de estaciones del camino
-	 */
-
+	 **************************************************************************************/
 	@Override
 	public TuplaCaminoValor caminoMenosEstaciones(Estacion estacionOrigen, Estacion estacionDestino) {
 		
@@ -118,63 +114,80 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 		
 		lista.primero();
 		
-		TuplaCaminoValor camino = new TuplaCaminoValor(lista,numEstaciones);
+		return  new TuplaCaminoValor(lista,numEstaciones);
 				
-		return camino;
 	}
 
-	/**Metodo que elimina la conexion existente entre dos estacioens de la red de Metro*/
+	/************************************************************************************
+	 *  
+	 * Metodo que elimina la conexion existente entre dos estaciones de la red de Metro
+	 * 
+	 * **********************************************************************************/
 	@Override
 	public void eliminarConexion(Estacion estacionOrigen, Estacion estacionDestino) {
 		
-                   
+        //obtenemos la lista con conexiones de la estacion origen
 		ListaEnlazada listaConexionOrigen = tablaNodos.get(estacionOrigen);
-		
-	     listaConexionOrigen.primero();
-	     while(listaConexionOrigen.estaDentro()) {
-	    	 Arista actual = (Arista)listaConexionOrigen.recuperar();
-	    	 if( actual.getDestino() == estacionDestino) {
+	    //situamos el nodo iterador al principio de la lista
+		listaConexionOrigen.primero();
+	    
+		//iteramos hasta el final de la lista
+		while(listaConexionOrigen.estaDentro()) {
+	    	 
+			//accedemos a las estaciones una a una
+			Arista actual = (Arista)listaConexionOrigen.recuperar();
+	    	//si alguna de las estaciones es la estacion destino eliminamos esta conexion de la lista
+			if( actual.getDestino() == estacionDestino) {
 	    		 listaConexionOrigen.eliminar(actual);
 	    	 }
-	    	 
+	    	 //avanzamos al siguiente nodo de la lista o estacion
 	    	 listaConexionOrigen.avanzar();
 	     }
+	   
 	     
 	}
 
-	/**Metodo que elimina una estacion de la red de Metro y, por consiguiente, todas
+	/**************************************************************************************
+	 * Metodo que elimina una estacion de la red de Metro y, por consiguiente, todas
 	 * las posibles conexiones que existan con otras estaciones de la red, tanto entrantes
 	 * como salientes
-	 */
+	 **************************************************************************************/
 	@Override
 	public void eliminarEstacion(Estacion estacion) {
-		
+		//eliminamos la estacion del grafo
 		tablaNodos.remove(estacion);
 	
+		// accedemos a las entradas del grafo, las estaciones con sus conexiones
 		Iterator<Entry<Object,ListaEnlazada>> it = tablaNodos.entrySet().iterator();
 		
+		//iteramos sobre las entradas del hashmap donde estan las estaciones asociadas con su lista de conexiones
 		while(it.hasNext()) {
+			//accedemos una a una a las entradas
 			Entry<Object,ListaEnlazada> actualEntry= it.next();
-			Estacion key = (Estacion)actualEntry.getKey();
+			//obtenemos su lista
 			ListaEnlazada listaActual = actualEntry.getValue();
+			//situamos el nodo iterador en el principio de la lista
 			listaActual.primero();
+			//iteramos hasta el final de la lista
 			while(listaActual.estaDentro()) {
-				
+				//recuperamos las conexiones 
 				Arista aris = (Arista)listaActual.recuperar();
+				// si alguna de las conexiones contiene la estacion eliminada
+				// entonces eliminamos esa conexion ya que la estacion ya no existe
 				if(aris.getDestino().equals(estacion)) {
 					listaActual.eliminar(aris);
-					listaActual.primero();
-					tablaNodos.put(key, listaActual);
 				}
+				//avanzamos
 				listaActual.avanzar();
 			}
+		
 		}
 	}
-	/**
-	 * Imprime la red del metro de 
-	 */
+	/***********************************************************************************
+	 * Imprime la red del metro 
+	 **********************************************************************************/
 	public void imprimirRed() {
-		imprimir();
+		super.imprimir();
 	}
 	
 	/************************************************************************************
@@ -182,7 +195,7 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 	 *                        METODOS PRIVADOS
 	 * 
 	 * ***********************************************************************************/
-	
+
 	/**
 	 * BSF o recorrido en anchura modificado para poder usarlo con un grafo 
 	 * con pesos. Solo se explica la parte del codigo añadida o modificada,
@@ -250,7 +263,7 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 					}
 					adyacentes.avanzar();			
 				}
-	
+	            adyacentes.primero();//TODO:AQUI
 			} catch (DesbordamientoInferior e) {
 				System.out.println("[ERROR message]:"+e.getMessage()+"\nline: 189-209\nclass: MetroMadrid\nMethod:private method can't acces information\n\n");
 			}
@@ -260,5 +273,65 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 		return tablaDistancias;
 	}
 	
+	/************************************************************************************
+	 * 
+	 *                     OTROS METODOS EXTRA
+	 * 
+	 * ***********************************************************************************/
+
+	/**
+	 * Este metodo elimina, solo y unicamente, todas las conexiones que puedan existir hacia esta estacion.
+	 * Sin embargo la estacion conserva las conexiones con otras estaciones.
+	 * @param estacion
+	 */
+	public void eliminarConexionesAEstacion(Estacion estacion) {
+		
+		
+		      //recorremos las entradas de la tabla hash (estacion, Lista conexiones)
+		      Iterator<Entry<Object, ListaEnlazada>>it = tablaNodos.entrySet().iterator();
+		
+		      //mientras hay elementos en la lista
+		      while(it.hasNext()) {
+		    	  //accedemos a las entradas una a una
+		    	  Entry<Object,ListaEnlazada> entrada = it.next();
+		    	  //obtenemos la respectiva lista con las conexiones 
+		    	  ListaEnlazada conexiones = entrada.getValue();
+		    	  //obtenemos el nombre de la estacion que estamos explorando
+		    	  Estacion estacionAexplorar = (Estacion)entrada.getKey();
+		    	  //situamos le puntero en la cabecera de la lista de conexiones
+		    	  conexiones.primero();
+		    	  //buscamos dentro de la lista una a una las conexiones
+		    	  while(conexiones.estaDentro()) {
+		    		    // recuperamos la arista que contiene el nombre de la estacion con la que hay conexion y su distancia
+		    		    Arista conexion = (Arista)conexiones.recuperar();
+		    		    //si el destino coincide con la estacion para la cual queremos eliminar todas las rutas que llegan hacia ella
+		    		    //eliminamos la conexion
+		    		    if( conexion.getDestino().equals(estacion)) {
+		    		    	this.eliminarConexion(estacionAexplorar, estacion);
+		    		    }
+		    		  
+		    		    // para evitar que se salga de la lista comprobamos que sigue dentro el puntero y avanzamos
+		    		    if(conexiones.estaDentro())
+		    		      conexiones.avanzar();
+		    	  }
+		      }
+	}
+	
+	/**
+	 * Podria darse el caso de que hubiera una averia en esa estación temporalmente
+	 * podriamos desabilitar todas las conexiones hacia esta.Se eliminan todas las 
+	 * conexiones hacia esta estacion y todas las conexiones de esta estacion hacia 
+	 * otras estaciones.Pero no se elimina la estacion.
+	 * @param estacion
+	 */
+	public void aislarEstacion(Estacion estacion) {
+		
+		// reusamos el metodo para eliminar todas las estaciones que apunten a esta
+		eliminarConexionesAEstacion(estacion);
+		// eliminamos todas las conexiones de la estacion esto es constante solo hay que crear una nueva lista de estaciones vacia
+		// y sustituirla el garbage collector se encarga de la antigua lista. Esto no seria posible en otros lenguajes como c++
+		tablaNodos.put(estacion, new ListaEnlazada());
+		
+	}
 
 }//end class

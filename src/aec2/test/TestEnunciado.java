@@ -67,18 +67,24 @@ public class TestEnunciado {
 						+ "Reciba un cordial saludo.\n" + "Metro de Madrid.\n",origen, destino, tuplaCaminoMasRapido.getValor(), 
 						tuplaCaminoMasRapido.getCamino(),tuplaCaminoMenosEstaciones.getCamino(), tuplaCaminoMenosEstaciones.getValor()));
 
-		// El resultado mostrado por este test se encuentra en el enunciado de nuestra
-		// actividad
+		/*******************************************************************************************************
+		 * TEST EXTRAS
+		 *******************************************************************************************************/
 		
-		/**TEST eliminar estacion F, al elminar la estacion F tambien eliminamos sus correspondientes aristas**/
+		/*****************************************************************************************************************
+		 *  1.  TEST de eliminar estacion F, al eliminar la estacion F tambien eliminamos sus correspondientes aristas
+		 *****************************************************************************************************************/
 		metro.eliminarEstacion(F);
-		 
+
+		System.out.println("\n----------------- DESPUES DE LA ELIMINACION ( estacion F y todas sus conexiones)-----------------------\n");
+	
+		((MetroMadrid)metro).imprimirRed();
 		origen = R;
 		destino = G;
 
 		tuplaCaminoMenosEstaciones = metro.caminoMenosEstaciones(origen, destino); 
 		tuplaCaminoMasRapido = metro.caminoMasRapido(origen, destino);
-		System.out.println("\n----------------- TEST ELIMINACION  ( estacion F y todas sus conexiones) -----------------------\n");
+	
 				
 		System.out.println(String.format(
 				"Estimado usuario,\n" + "El camino mas rapido para ir de la estacion %s a la estacion %s "
@@ -88,19 +94,57 @@ public class TestEnunciado {
 						+ "Reciba un cordial saludo.\n" + "Metro de Madrid.\n",origen, destino, tuplaCaminoMasRapido.getValor(), 
 						tuplaCaminoMasRapido.getCamino(),tuplaCaminoMenosEstaciones.getCamino(), tuplaCaminoMenosEstaciones.getValor()));
 
-		System.out.println("\n----------------- DESPUES DE LA ELIMINACION-----------------------\n");
-	
-		((MetroMadrid)metro).imprimirRed();
-		
-		System.out.println("\n\n----------------- TEST ELIMINACION UNA CONEXION ( de la estacion T) -----------------------\n\n");
+		/****************************************************************************************************************
+		 * 2.TEST
+		 *  
+         * Eliminar una sola conexion entre una estacion origen y una destino
+         * 
+         * 
+		 *****************************************************************************************************************/
+		System.out.println("\n\n----------------- TEST ELIMINACION UNA CONEXION ( de la estacion T con G) -----------------------\n\n");
 		
 		System.out.println("\nGrafo antes de la eliminacion de la conexion de T con G, (40,G):\n");
 		((MetroMadrid)metro).imprimirRed();
 		System.out.println("\nGrafo despues de la eliminacion de la conexion de T con G, (40,G):\n");
 	     
-		((MetroMadrid)metro).eliminarConexion(T, G);
+		((MetroMadrid)metro).eliminarConexion(T, G);//metodo de eliminacion de conexiones entre dos estaciones
 		((MetroMadrid)metro).imprimirRed();
 		
+		/*****************************************************************************************************************
+		 * 3.TEST
+		 *  
+         * Eliminar todas las conexiones hacia una estacion:
+         * Podria darse el caso de canbio de rutas hacia una estacion en concreto por lo tanto esa ruta ya no estaria
+         * presente en las otras estaciones. Sin embargo la estacion seguiria conservando sus rutas
+         * 
+		 *****************************************************************************************************************/
+		System.out.println("\n----------------- ANTES DE LA ELIMINACION DE LAS RUTAS HACIA LA ESTACION T (las estaciones B y R apuntan a la estacion T)-----------------------\n");
+		((MetroMadrid)metro).imprimir();
+		
+		((MetroMadrid)metro).eliminarConexionesAEstacion(T);
+		System.out.println("\n----------------- DESPUES DE LA ELIMINACION DE LAS RUTAS HACIA LA ESTACION T ( las estaciones B y R no apuntan a la estacion T)-----------------------\n");
+		((MetroMadrid)metro).imprimir();
+		
+		/*****************************************************************************************************************
+		 * 4.TEST
+		 *  
+         * Aislar una estacion:
+         * Podria darse el caso de que hubiera una averia en esa estación temporalmente podriamos desabilitar todas
+         * las conexiones hacia esta.
+         * Se eliminan todas las conexiones hacia esta estacion y todas las conexiones de esta estacion hacia otras estaciones.
+         * Pero no se elimina la estacion.
+		 *****************************************************************************************************************/
+		
+		//Recuperamos las conexiones eliminadas ya que el grafo ha sido disminuido signifcantemente
+		metro.anadirConexion(B, T, 10);
+		metro.anadirConexion(B, S, 15);
+		System.out.println("\n----------------- ANTES DE LA DE AISLAR LA ESTACION B (la estacion R apunta a la estacion B, y B apunta a la estacion T y S)-----------------------\n");
+		System.out.println("Debido a la disminucion del grafo añadimos dos conexiones a B antes de aislarla:\nmetro.anadirConexion(B, T, 10);\n" + 
+		                   "metro.anadirConexion(B, S, 15);\n");
+		((MetroMadrid)metro).imprimir();
+		((MetroMadrid)metro).aislarEstacion(B);
+		System.out.println("\n----------------- DESPUES DE LA DE AISLAR LA ESTACION B (la estacion R ya NO apunta a la estacion B, y B Ya apunta a la estacion T y S, o cualquier otra)-----------------------\n");
+		((MetroMadrid)metro).imprimir();
 		
 		
 		
