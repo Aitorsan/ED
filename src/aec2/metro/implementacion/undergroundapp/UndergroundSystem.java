@@ -6,27 +6,24 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-
+import javax.swing.JTextArea;
 import aec2.metro.implementacion.MetroMadrid;
-import javax.swing.JOptionPane;
+
 public class UndergroundSystem extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private final int Width=800;
-	private final int Height = 700;
+	private final int Height = 500;
 	//Images
 	private ImageIcon image;
+	private ImageIcon image2;
 	//Layout
 	CardLayout clLayout;
 	//Underground graf
@@ -39,19 +36,31 @@ public class UndergroundSystem extends JFrame{
 	JPanel userPanel;
 	JPanel stuffPanel;
 	//JOptionPane para elegir las rutas	
-
-	JOptionPane originStation;
-	JOptionPane endStation;
+    
+	JComboBox<String> originStation;
+	JComboBox<String> endStation;
+	//JTextArea for the information to be displayed
+	JTextArea infoArea;
 	//JButtons to select panel views
 	JButton userButton;
 	JButton stuffButton;
     //JButtons
 	JButton consultButton;
 	JButton exitButton;
+	//Jlabels
+	JLabel originLabel;
+	JLabel destinyLabel;
+	//Jbuttons for add new stations or delete
+	JButton addStationButton;
+	JButton addConectionButton;
+	JButton deleteConectionButton;
+	JButton isolateStationButton;
+	JButton deleteStationButton;
 	
 	 public UndergroundSystem(String name) {
 		 this.setTitle(name);
-		 security= new SecurityManager("aec2ASF11");
+		 metro = Loader.getMetroData();
+		 security= new SecurityManager();
 		 initComponents();
 		 registerListeners();
 		 this.setPreferredSize(new Dimension(Width,Height));
@@ -72,6 +81,7 @@ public class UndergroundSystem extends JFrame{
 	
 		 //intial panel setup
 		 initialPanel = new JPanel();
+		 initialPanel.setBackground(new Color(50,100,90));
 		 SpringLayout springLayout = new SpringLayout();
 		 initialPanel.setLayout(springLayout);
 		 userButton =new  JButton("Realizar Consulta");
@@ -83,12 +93,15 @@ public class UndergroundSystem extends JFrame{
 		 }catch(Exception e) {
 			 System.out.println("no se ha podido cargar la imagen");
 		 }
+		
+	   
 		 JLabel auxiliarImage = new JLabel(image);
+	
 		 springLayout.putConstraint(SpringLayout.WEST, auxiliarImage, 140,SpringLayout.WEST, container);
-		 springLayout.putConstraint(SpringLayout.SOUTH, auxiliarImage, Height/2+60,SpringLayout.SOUTH, container);
+		 springLayout.putConstraint(SpringLayout.SOUTH, auxiliarImage, Height,SpringLayout.SOUTH, container);
 	     initialPanel.add(auxiliarImage);
-		 springLayout.putConstraint(SpringLayout.WEST, stuffButton, (Width/2)-(Width/8),SpringLayout.WEST, container);
-		 springLayout.putConstraint(SpringLayout.SOUTH, stuffButton, Height/2,SpringLayout.NORTH, container);
+		 springLayout.putConstraint(SpringLayout.EAST, stuffButton, (Width/4),SpringLayout.WEST, container);
+		 springLayout.putConstraint(SpringLayout.NORTH, stuffButton, 20,SpringLayout.NORTH, container);
 		 springLayout.putConstraint(SpringLayout.NORTH, userButton, 50,SpringLayout.NORTH, stuffButton);
 		 springLayout.putConstraint(SpringLayout.WEST, userButton, 0,SpringLayout.WEST, stuffButton);
 		 springLayout.putConstraint(SpringLayout.EAST, userButton, 0,SpringLayout.EAST, stuffButton);
@@ -96,17 +109,97 @@ public class UndergroundSystem extends JFrame{
 		 initialPanel.add(stuffButton);
 
 		 
-		 
-		 
-		 
+		 //userPanel
+		 SpringLayout layoutUsers = new SpringLayout();
 		 userPanel = new JPanel();
-		 userPanel.setBackground(Color.GREEN);
-		 stuffPanel = new JPanel();
-		 stuffPanel.setBackground(Color.BLUE);
-		   
-		 //Jbuttons for the public user area
-		 consultButton = new JButton("Consultar");
+		 userPanel.setLayout(layoutUsers);
+		 userPanel.setBackground(new Color(50,100,90));
+		 infoArea = new JTextArea();
+		 infoArea.setEditable(false);
+		 consultButton= new JButton("Consultar");
 		 exitButton = new JButton("Salir");
+		 originLabel = new JLabel("Origen:");
+		 destinyLabel = new JLabel("Destino:");
+		 
+		 
+		 
+		
+		 originStation = new JComboBox<String>(metro.getStations());
+		 endStation = new JComboBox<String>(metro.getStations());
+		 
+		 
+		 //information text area
+		 layoutUsers.putConstraint(SpringLayout.WEST,infoArea, 5, SpringLayout.WEST,userPanel);
+		 layoutUsers.putConstraint(SpringLayout.EAST,infoArea, -5,SpringLayout.EAST,userPanel);
+		 layoutUsers.putConstraint(SpringLayout.NORTH,infoArea,5,SpringLayout.NORTH, userPanel);
+		 layoutUsers.putConstraint(SpringLayout.SOUTH, infoArea, -Height/2,SpringLayout.SOUTH,userPanel);
+		 //label origin position
+		 layoutUsers.putConstraint(SpringLayout.NORTH,originLabel, 10, SpringLayout.SOUTH,infoArea);
+		 layoutUsers.putConstraint(SpringLayout.EAST,originLabel, Width/3, SpringLayout.WEST,userPanel);
+		 //combobox origin
+		 layoutUsers.putConstraint(SpringLayout.NORTH,originStation, 10, SpringLayout.SOUTH,infoArea);
+		 layoutUsers.putConstraint(SpringLayout.WEST, originStation,5, SpringLayout.EAST, originLabel);
+		 layoutUsers.putConstraint(SpringLayout.EAST,originStation,100, SpringLayout.EAST,originLabel);
+ 
+		 //label destiny position
+		 layoutUsers.putConstraint(SpringLayout.NORTH,destinyLabel, 20, SpringLayout.SOUTH,  originLabel);
+		 layoutUsers.putConstraint(SpringLayout.EAST, destinyLabel, 0, SpringLayout.EAST,originLabel);
+		 
+		 //combobox destiny
+		 layoutUsers.putConstraint(SpringLayout.NORTH,endStation,10,SpringLayout.SOUTH,originStation);
+		 layoutUsers.putConstraint(SpringLayout.WEST, endStation, 5, SpringLayout.EAST, destinyLabel);
+		 layoutUsers.putConstraint(SpringLayout.EAST,endStation,100, SpringLayout.EAST,destinyLabel);
+		 //buttons
+         layoutUsers.putConstraint(SpringLayout.EAST,consultButton,Width/3,SpringLayout.WEST,userPanel);
+         layoutUsers.putConstraint(SpringLayout.NORTH, consultButton, 20, SpringLayout.SOUTH, destinyLabel);
+		 
+         layoutUsers.putConstraint(SpringLayout.WEST, exitButton, 10, SpringLayout.EAST, consultButton);
+         layoutUsers.putConstraint(SpringLayout.NORTH, exitButton, 20, SpringLayout.SOUTH, destinyLabel);
+		 
+         userPanel.add(infoArea);
+		 userPanel.add(originLabel);
+		 userPanel.add(originStation);
+		 userPanel.add(destinyLabel);
+		 userPanel.add(endStation);
+		 userPanel.add(consultButton);
+		 userPanel.add(exitButton);
+		 
+		 //stuff panel
+		 SpringLayout stuffLayout = new SpringLayout();
+		 stuffPanel = new JPanel();
+		 stuffPanel.setLayout(stuffLayout);
+		 stuffPanel.setBackground(Color.BLUE);
+		 addStationButton = new JButton("Nueva estacion");
+		 addConectionButton = new JButton("Nueva conexion");
+		 deleteConectionButton = new JButton("eliminar estacion");
+		 isolateStationButton = new JButton("Aislar estacion");
+	     deleteStationButton= new JButton("Eliminar estacion");
+	     addConectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		 JLabel imageStuffpanel = new JLabel(image);
+		 
+		 stuffLayout.putConstraint(SpringLayout.WEST, imageStuffpanel, 140,SpringLayout.WEST, container);
+		 stuffLayout.putConstraint(SpringLayout.SOUTH, imageStuffpanel, Height,SpringLayout.SOUTH, container);
+	     stuffPanel.add(imageStuffpanel);
+	     stuffLayout.putConstraint(SpringLayout.EAST, addStationButton, (Width/4),SpringLayout.WEST, container);
+	     stuffLayout.putConstraint(SpringLayout.NORTH, addStationButton, 20,SpringLayout.NORTH, container);
+	     stuffLayout.putConstraint(SpringLayout.NORTH, addConectionButton, 50,SpringLayout.NORTH, addStationButton);
+	     stuffLayout.putConstraint(SpringLayout.WEST, addConectionButton, 0,SpringLayout.WEST, addStationButton);
+	     stuffLayout.putConstraint(SpringLayout.EAST, addConectionButton, 10,SpringLayout.EAST, addStationButton);
+	    d
+		 
+		 stuffPanel.add(addStationButton);
+		 stuffPanel.add(addConectionButton);
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 		 
 		 container.add(initialPanel,"0");
 		 container.add(userPanel,"1");
@@ -121,11 +214,37 @@ public class UndergroundSystem extends JFrame{
 		 
 		 userButton.addActionListener(new ConsultAction());
 		 stuffButton.addActionListener(new AutorizedAction());
-		 
-		 
+		 exitButton.addActionListener(new GoBackAction());
+		 security.getConfirm().addActionListener(new PasswordActionListener());
+		 security.getExit().addActionListener(new PasswordActionListener());
 		 
 	 }
 	 
+	 
+	 /**
+	  * Inner class actionListener
+	  * @author Aitor
+	  *
+	  */
+	 class GoBackAction implements ActionListener{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				clLayout.previous(container);
+				
+			}
+			 
+		 }
+	 
+	 
+	 
+	 
+	 /**
+	  * Inner class actionListener
+	  * @author Aitor
+	  *
+	  */
 	 class ConsultAction implements ActionListener{
 
 			@Override
@@ -137,42 +256,68 @@ public class UndergroundSystem extends JFrame{
 			}
 			 
 		 }
+	 /**
+	  * Inner class actionListener
+	  * @author Aitor
+	  *
+	  */
+	 class PasswordActionListener implements ActionListener{
+		 
+		 @Override
+		 public void actionPerformed(ActionEvent e) {
+			 
+			 
+			 if( e.getSource() == security.getConfirm()) {
+				boolean valid = false;
+				char[]pass = security.getpassField();
+				for(int i = 0;i < pass.length;++i) {
+				
+				     if( security.getAutrizedPassword().charAt(i)!= pass[i]) {
+				          valid = false;
+				          break;
+				     }
+				
+				     valid = true;
+				}
+				
+			  if( valid) {
+			
+				JOptionPane.showMessageDialog(security, "Bienvenido!! puede continuar", "Metro management", JOptionPane.INFORMATION_MESSAGE);
+				security.dispose();
+				clLayout.show(container, "2");
+				security.reset();
+				 
+			  }else {
+					
+					JOptionPane.showMessageDialog(security, "EL password introducido no es correcto", "Error", JOptionPane.ERROR_MESSAGE);
+					security.reset();
+					valid = false;
+			   }
+		 
+			 }else {
+				
+				 security.dispose();
+			     security.reset();
+			 }
+		 }
+	 }
+	 /**
+	  * Inner class ActionListener
+	  * @author Aitor
+	  *
+	  */
 	 class AutorizedAction implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			security.setVisible(true);
-			security.askPassword();
-			//stuff panel only avaliable for autorized employees
-			if(security.verifyPassword()) {
-				//si the password matches we change the view
-				
-				clLayout.show(container, "2");
-			}else {
-				// si no avisamos que es incorrecto y dejamos como estaba el asunto
-			
-            	JOptionPane.showMessageDialog(null,"Solo personal autorizado, disculpe las molestias", "Informacion",JOptionPane.INFORMATION_MESSAGE);
-			
+			security.setVisible(true);	
 		
-			}
-		 
-	
 		}
-	 
-	 }
-	 
-	 
+	
+	}
 	 
 	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+ 
 	 
 	 
 	 

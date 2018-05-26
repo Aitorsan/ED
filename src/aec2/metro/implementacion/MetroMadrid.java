@@ -1,5 +1,6 @@
 package aec2.metro.implementacion;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -18,7 +19,12 @@ import pilas.PilaEnlazada;
  * @author Aitor sanmartin ferreira
  *
  */
-public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
+public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4777426820851040383L;
 
 	/**Constructor de la red MetroMadrid**/
 	public MetroMadrid() {
@@ -331,6 +337,24 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro {
 		// eliminamos todas las conexiones de la estacion esto es constante solo hay que crear una nueva lista de estaciones vacia
 		// y sustituirla el garbage collector se encarga de la antigua lista. Esto no seria posible en otros lenguajes como c++
 		tablaNodos.put(estacion, new ListaEnlazada());
+		
+	}
+	
+	
+	/**
+	 * Metodo para la gui para recojer el nombre de las estaciones
+	 */
+	public String[] getStations() {
+		
+	
+		Estacion[] e=  tablaNodos.keySet().toArray(new Estacion[0]);
+		String [] s = new String[e.length];
+     
+		for(int i = 0; i < e.length;++i) {
+		 
+			s[i] = e[i].getNombre();
+		}
+		return s;
 		
 	}
 

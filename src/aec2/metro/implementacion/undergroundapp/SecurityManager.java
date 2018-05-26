@@ -3,111 +3,87 @@ package aec2.metro.implementacion.undergroundapp;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 import javax.swing.JFrame;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-public class SecurityManager extends JFrame {
+public class SecurityManager extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	
 	//variables
-	private final int width = 400;
-	private final int height = 300;
-	private Employee[]employeData;
+	private final int width = 300;
+	private final int height = 100;
+	final String autrizedPassword="udima2";
 
-	private String user;
-	private String password;
 	private JPasswordField passwordField;
-	private JTextField userField;
-	private JLabel labelUsuario;
+	
 	private JLabel labelPassword;
 	private JButton resetFields;
 	private JButton confirm;
 	private JButton exit;
 	
-	//constructor
-	public SecurityManager(String password) {
-		this.password = password;
-		inicializarComponentes();
+	//validation
+	boolean valid = false;
 	
+	//constructor
+	public SecurityManager() {
+		
+		inicializarComponentes();
+	    this.setModal(true);
 		this.setPreferredSize(new Dimension(width,height));
+		this.setLocationRelativeTo(null);
 		this.pack();
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
+	public String getAutrizedPassword() {
+		return autrizedPassword;
+	}
+
+	public JButton getConfirm() {
+		return confirm;
+	}
+
+	public JButton getExit() {
+		return exit;
+	}
+
 	private void inicializarComponentes() {
 	
 		
-		employeeData = Loader.getEmployeesData();
-		SpringLayout layout = new SpringLayout();
+           this.getContentPane().setLayout(new FlowLayout());
 		
-		this.getContentPane().setLayout(layout);
-	    	
 		confirm = new JButton("Aceptar");
 		exit = new JButton("Salir");
 		resetFields = new JButton("Clear");
 		
-		userField = new JTextField();
-	    passwordField = new JPasswordField();
+	    passwordField = new JPasswordField(20);
 		passwordField.setEchoChar('*');
-		labelUsuario= new JLabel("Usuario:");
 		labelPassword = new JLabel("Password");
-		layout.putConstraint(SpringLayout.NORTH, labelUsuario, 10, SpringLayout.NORTH,this);
-		layout.putConstraint(SpringLayout.WEST,labelUsuario, 20,SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH,userField,10,SpringLayout.SOUTH,labelUsuario);
-		layout.putConstraint(SpringLayout.NORTH, labelPassword, 10, SpringLayout.NORTH, userField);
-		layout.putConstraint(SpringLayout.NORTH, passwordField, 10, SpringLayout.SOUTH,labelPassword);
+
 	
-		
-		
-		
-	
-	   this.getContentPane().add(labelUsuario);
-	   this.getContentPane().add(userField);
 	   this.getContentPane().add(labelPassword);
 	   this.getContentPane().add(passwordField);
-	   
-	
+	   this.getContentPane().add(confirm);
+	   this.getContentPane().add(exit);
 	
 	}	
 	
-	public boolean searchEmployee(String employee) {
-		
-		
-		return true;
-	}
-	
-	
-	class ButtonPressed implements ActionListener{
-	
-	
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if(searchEmployee(userField.getText())) {
-			
-				
-			}else {
-				throw new Exception("Employee is not autorized");
-			}
-			
-		}
-		
-		
+	
+	public char[] getpassField() {
+		return passwordField.getPassword();
 	}
-	
-	
-	public void askPassword() {
-		 JOptionPane.showInputDialog(this,passwordField.getPassword());
+	public void reset() {
+		passwordField.setText("");
 	}
-	
 	public boolean verifyPassword() {
-		return (this.password.equals(password)) ;
+		return valid;
 	}
 }

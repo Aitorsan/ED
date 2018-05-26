@@ -45,6 +45,10 @@ public class TestEnunciado {
 		metro.anadirConexion(S, G, 7);
 		metro.anadirConexion(G, R, 8);
 
+		String[] s = ((MetroMadrid)metro).getStations();
+		for(String n : s ){
+			System.out.println(n);
+		}
 		//comprobar que esta todo introducido correctamente
 		System.out.println("\n----------------- ANTES DE LA ELIMINACION-----------------------\n");
 	     ((MetroMadrid)metro).imprimirRed();
