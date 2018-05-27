@@ -4,6 +4,12 @@ import excepciones.DesbordamientoInferior;
 
 public class PilaVector implements Pila{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -614349278171404573L;
+
+
 	/**Vector que contiene los datos de la pila**/
 	private Object[] datos;
 	

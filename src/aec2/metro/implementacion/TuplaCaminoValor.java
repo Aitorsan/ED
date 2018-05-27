@@ -1,10 +1,15 @@
 package aec2.metro.implementacion;
 
+import java.io.Serializable;
+
 import listas.ListaEnlazada;
 
-public class TuplaCaminoValor {
+public class TuplaCaminoValor implements Serializable {
 
 
+	/***/
+	private static final long serialVersionUID = -1952637944523324421L;
+	
 	private ListaEnlazada camino;
 	private int valor;
 

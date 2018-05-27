@@ -1,10 +1,17 @@
 package grafos;
 
+import java.io.Serializable;
+
 /**
  * Representacion de las aristas de un grafo con la implementacion<br> 
  * de adyacencia.
  */
-public class Arista {
+public class Arista implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1060711704035887827L;
 
 	/**Coste de la arista**/
 	private int coste;

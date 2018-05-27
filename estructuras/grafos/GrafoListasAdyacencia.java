@@ -17,6 +17,10 @@ import java.util.Iterator;
 /**Implementacion de un grafo con listas de adyacencia**/
 public class GrafoListasAdyacencia implements Grafo{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2968583975208005382L;
 	/**Tabla de dispersion que contiene los nodos del grafo y los asocia con sus listas de adyacencia**/
 	protected HashMap<Object,ListaEnlazada> tablaNodos;
 	
@@ -37,7 +41,8 @@ public class GrafoListasAdyacencia implements Grafo{
 	/**Inserta una arista entre el nodo origen y el nodo detsino con el coste pasado por parametro**/
 	@Override
 	public void insertarArista(Object origen, Object destino, int coste) throws OperacionIncorrecta {
-		//se comprueba que existan los nodos
+
+		//se comprueba que existan los nodos	
 		if( tablaNodos.get(origen) == null || tablaNodos.get(destino)==null){
 			throw new OperacionIncorrecta("No se puede insertar una arista entre nodos inexistentes");
 		}

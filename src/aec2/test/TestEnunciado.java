@@ -35,7 +35,7 @@ public class TestEnunciado {
 		metro.anadirConexion(R, B, 3);
 		metro.anadirConexion(R, T, 10);
 		metro.anadirConexion(B, T, 10);
-		metro.anadirConexion(T, C, 8);
+		metro.anadirConexion(T, C, 8);//
 		metro.anadirConexion(T, G, 40);
 		metro.anadirConexion(T, F, 6);
 		metro.anadirConexion(C, E, 9);
@@ -147,7 +147,7 @@ public class TestEnunciado {
 		                   "metro.anadirConexion(B, S, 15);\n");
 		((MetroMadrid)metro).imprimir();
 		((MetroMadrid)metro).aislarEstacion(B);
-		System.out.println("\n----------------- DESPUES DE LA DE AISLAR LA ESTACION B (la estacion R ya NO apunta a la estacion B, y B Ya apunta a la estacion T y S, o cualquier otra)-----------------------\n");
+		System.out.println("\n----------------- DESPUES DE LA DE AISLAR LA ESTACION B (la estacion R ya NO apunta a la estacion B, y B Ya NO apunta a la estacion T y S, o cualquier otra)-----------------------\n");
 		((MetroMadrid)metro).imprimir();
 		
 		

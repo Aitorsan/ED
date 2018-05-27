@@ -1,8 +1,15 @@
 package grafos;
 
+
+
 /**Almacena la informacion necesaria de cada nodo para realizar el algoritmo de Dijkstra**/
 public class CasillaDijkstra extends Casilla {
 
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -383921627007579926L;
 	/**Determina si un nodo ha sido explorado**/
 	private boolean explorado;
 	

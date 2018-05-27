@@ -6,6 +6,10 @@ import nodos.NodoDoble;
  */
 public class ListaDobleEnlazada implements Lista {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -523082205997078693L;
 	/**cabecera**/
      NodoDoble cabecera;
      /**terminacion**/

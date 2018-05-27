@@ -1,6 +1,8 @@
 package listas;
 
-public interface Lista {
+import java.io.Serializable;
+
+public interface Lista extends Serializable {
 	
 	/**Inserta el elemento pasado por parametro despues de la posicion actual**/
 	public void insertar(Object elemento);

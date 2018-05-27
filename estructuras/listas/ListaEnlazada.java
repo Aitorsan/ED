@@ -5,6 +5,11 @@ import nodos.Nodo;
 /**Clase que implementa una lista enlazada**/
 public class ListaEnlazada implements Lista{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8021340129708416557L;
+
 	/**Enlace al nodo cabecera*/
 	protected Nodo cabecera;
 	

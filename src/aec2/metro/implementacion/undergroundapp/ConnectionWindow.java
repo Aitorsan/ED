@@ -8,6 +8,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import aec2.metro.implementacion.Estacion;
+
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Dimension;
@@ -109,11 +111,35 @@ public class ConnectionWindow extends JDialog{
 	}
 
 
-	public JButton getAcceptConnectionButton() {
+	public JButton getConfirmationButton() {
 		return acceptConnectionButton;
 	}
+	public Estacion getOriginStation() {
+		 return new Estacion((String)comboBoxOrigin.getSelectedItem());
+	}
+	public int getDistanceBetween() {
+	    //We know will be allways an integer value no problemo
+		return (int) sdistanceChooser.getValue();
+	}
+	public Estacion getDestinyConection() {
+		
+		return new Estacion((String)comboBoxDestiny.getSelectedItem());
+	}
 	
+	public void updateComboBoxes(String newItem) {
+		if(comboBoxDestiny != null) {
+			comboBoxDestiny.addItem(newItem);			
+		}
+		comboBoxOrigin.addItem(newItem);
+	}
 	
-	
+
+	public void removeItemComboBoxes(String item) {
+		if(comboBoxDestiny != null) {
+			comboBoxDestiny.removeItem(item);			
+		}
+		comboBoxOrigin.removeItem(item);
+	}
+		
 
 }

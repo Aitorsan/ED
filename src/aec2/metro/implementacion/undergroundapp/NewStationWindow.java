@@ -26,7 +26,7 @@ public class NewStationWindow extends JDialog{
 	//JButtons
 	private JButton clearButton;
 	private JButton confirmButton;
-	private JButton exitButton;
+
 	//Jpanel for the gridbaglayout
 
 	//Constructor
@@ -66,10 +66,6 @@ public class NewStationWindow extends JDialog{
 		constraints.gridy=1;
 		this.add(clearButton,constraints);
 		
-		exitButton= new JButton("Salir");
-		constraints.gridx=2;
-		constraints.gridy=1;
-		this.add(exitButton,constraints);
 		
 		//textfield
 		textField = new JTextField(20);
@@ -88,18 +84,17 @@ public class NewStationWindow extends JDialog{
 		textField.setText("");
 	}
 	
-	
-	
-	//JBUtton getters to set the action listeners in other class
-	public JButton getExitButton() {
-		return exitButton;
-	}
-	
+	//Getters
 	public JButton getConfirmButton() {
 		return confirmButton;
 	}
 	public JButton getClearButton(){
 		return clearButton;
+	}
+
+	public String getnewStationName() {
+		
+		return textField.getText();
 	}
 
 }

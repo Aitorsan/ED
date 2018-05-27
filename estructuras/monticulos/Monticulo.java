@@ -1,9 +1,18 @@
 package monticulos;
 
+import java.io.Serializable;
+
 import excepciones.DesbordamientoInferior;
 /**Estaclase implementa un monticulo, que es una implementacion eficiente de la 
  * cola de prioridad**/
-public class Monticulo implements ColaPrioridad {
+public class Monticulo implements ColaPrioridad{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1881200029996062186L;
+
+	
 
 	/**Este vector tiene los elementos del monticulo.En esta respresentacion,
 	 * cada nodo en la posicion x tiene sus hijos en x*2 y x*2+1, y el nodo raiz

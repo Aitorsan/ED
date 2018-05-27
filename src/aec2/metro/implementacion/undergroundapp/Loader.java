@@ -36,7 +36,7 @@ public class Loader {
 	}
 	
 	
-	public void saveUndergroundData(MetroMadrid data) {
+	public static void saveUndergroundData(MetroMadrid data) {
 		
 		
 		try(ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("metroMadrid.dat"))){

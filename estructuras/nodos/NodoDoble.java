@@ -1,10 +1,17 @@
 package nodos;
 
+import java.io.Serializable;
+
 /**
  * Clase que representa un nodo de una lista doblemente enlazada
  *
  */
-public class NodoDoble {
+public class NodoDoble implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4157020850114484790L;
 
 	/**Elemento que contiene el nodo**/
 	private Object elemento;

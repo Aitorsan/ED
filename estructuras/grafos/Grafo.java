@@ -1,12 +1,15 @@
 package grafos;
 
 import listas.ListaEnlazada;
+
+import java.io.Serializable;
+
 import excepciones.OperacionIncorrecta;
 
 /**Definicion de un grafo dirigido con pesos.Los otros tipos de grafos se pueden considerar<br> 
  * casos particulares de este.
  */
-public interface Grafo {
+public interface Grafo extends Serializable{
 
 	/**Inserta un nodo con el elemento pasado por parametro**/
 	public void insertarNodo(Object elemento);

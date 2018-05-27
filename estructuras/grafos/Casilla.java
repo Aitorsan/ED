@@ -1,10 +1,17 @@
 package grafos;
 
+import java.io.Serializable;
+
 /** Casilla de la tabla de distancias necesaria para la busqueda de caminos minimos.
  *  Contiene un numero con la distancia y un enlace al anterior nodo.
  */
-public class Casilla {
+public class Casilla implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1342037129257379483L;
+
 	/**Distancia al nodo origen**/
 	private int distancia;
 	

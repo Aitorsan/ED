@@ -3,6 +3,11 @@ import excepciones.OperacionIncorrecta;
 /**Implementacion de grafos no dirigidos con listas de adyacencia**/
 public class GrafoListasAdyacenciaNoDirigido extends GrafoListasAdyacencia{
 
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6281413879497307931L;
+
 /**Inserta una arista simetrica entre dos nodos con el coste indicado por parametro**/
 	public void insertarArista(Object nodo1, Object nodo2,int coste) throws OperacionIncorrecta{
 		super.insertarArista(nodo1, nodo2, coste);

@@ -1,8 +1,16 @@
 package aec2.metro.implementacion;
 
-public class Estacion {
+import java.io.Serializable;
+
+public class Estacion implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5023547579023716448L;
+	
+	
 	private String nombre;
 
 	public Estacion(String nombre) {
@@ -17,6 +25,8 @@ public class Estacion {
 	public String toString() {
 		return nombre;
 	}
+
+	
 	
 	
 

@@ -1,9 +1,15 @@
 package grafos;
 
+import java.io.Serializable;
 
 /**Representa un camino con un destino y una longitud,
  * y se usa en el algoritmo de Dijkstra.*/
-public class Camino implements Comparable<Object> {
+public class Camino implements Comparable<Object>,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4873347123735141409L;
 
 	/**Destino del camino*/
 	private Object destino;

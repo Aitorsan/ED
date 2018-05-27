@@ -1,8 +1,10 @@
 package monticulos;
 
+import java.io.Serializable;
+
 import excepciones.DesbordamientoInferior;
 /**Esta interfaz define las operaciones de una cola de prioridad**/
-public interface ColaPrioridad {
+public interface ColaPrioridad extends Serializable{
 
 	/**Inserta un elemento en la cola de prioridad. El nivel de
 	 * prioridad se puede comprar usando la comparacion propioa

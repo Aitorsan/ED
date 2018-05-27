@@ -7,6 +7,11 @@ import listas.ListaEnlazada;
 /**Grafo implementado con una matriz de adyacencia**/
 public class GrafoMatrizAdyacencia implements Grafo{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3259024670728840528L;
+
 	/**Vector con los nodos**/
 	private Object nodos[];
 	

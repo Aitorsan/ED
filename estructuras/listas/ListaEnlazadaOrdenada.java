@@ -9,6 +9,10 @@ public class ListaEnlazadaOrdenada extends ListaEnlazada {
 	 * un orden en la insercion.
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6890305092317965259L;
 	public void insertar(Object elemento)
 	{
 		//Se comprueba que el elemento es comprable

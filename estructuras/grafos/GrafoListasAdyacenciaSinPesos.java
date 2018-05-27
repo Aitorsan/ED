@@ -12,6 +12,12 @@ import colas.ColaEnlazada;
 public class GrafoListasAdyacenciaSinPesos extends GrafoListasAdyacencia{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7564416471490874123L;
+
+
 	/**Inserta un arista entre el nodo origen y el nodo destino**/
 	public void insertarArista(Object origen,Object destino)throws OperacionIncorrecta{
 		super.insertarArista(origen, destino, 1);

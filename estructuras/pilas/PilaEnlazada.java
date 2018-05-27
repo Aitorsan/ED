@@ -4,6 +4,10 @@ import excepciones.DesbordamientoInferior;
 
 public class PilaEnlazada implements Pila {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8859312240484125167L;
 	/**Referencia al ultimo nodo, que esta en la cima d ela pila**/
 	private Nodo cima;
 	

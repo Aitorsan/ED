@@ -1,8 +1,10 @@
 package pilas;
 
+import java.io.Serializable;
+
 import excepciones.DesbordamientoInferior;
 
-public interface Pila {
+public interface Pila extends Serializable {
 	/**Inserta un elemento al final de la pila**/
 	public void apilar(Object elemento);
 	

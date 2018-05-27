@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Set;
+
 import aec2.metro.interfaz.IMetro;
 import colas.Cola;
 import colas.ColaEnlazada;
@@ -29,7 +31,7 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 	/**Constructor de la red MetroMadrid**/
 	public MetroMadrid() {
 		//Inciamos un grafo vacio
-		super();
+		
 	}
 	
 	@Override
@@ -37,7 +39,7 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 	 * Metodo que inserta una nueva estacion en la red del metro
 	 ***********************************************************************************/
 	public void anadirEstacion(Estacion estacion) {
-		insertarNodo(estacion);		
+			super.insertarNodo(estacion);
 	}
 
 	/***********************************************************************************
@@ -48,7 +50,8 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 	public void anadirConexion(Estacion estacionOrigen, Estacion estacionDestino, int tiempo) {
 		
 		try {
-			insertarArista(estacionOrigen, estacionDestino, tiempo);	
+			
+			super.insertarArista(estacionOrigen, estacionDestino, tiempo);	
 		} catch (OperacionIncorrecta e) {
 			System.out.println(e.getMessage());
 		}
@@ -75,7 +78,7 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 	}
 
 	/**************************************************************************************
-	 * Metodo que determina y devuelve le camino con menso estaciones entre dos estaciones 
+	 * Metodo que determina y devuelve le camino con menos estaciones entre dos estaciones 
 	 * dadas, ademas del numero de estaciones del camino
 	 **************************************************************************************/
 	@Override
@@ -86,7 +89,7 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 		//Se obtiene la tabla distancias llamando al metodo correspondiente
 		HashMap<Object,CasillaDijkstra>distancia= buscarCaminosMinimos(estacionOrigen);
 		
-		//Se comprueba qaue se ha obtenido un camino.Si no es asi se devuelve nulo
+		//Se comprueba que se ha obtenido un camino.Si no es asi se devuelve nulo
 		if(distancia.get(estacionDestino).getDistancia() == Integer.MAX_VALUE) {
 			return null;
 		}
@@ -341,8 +344,10 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 	}
 	
 	
+
 	/**
 	 * Metodo para la gui para recojer el nombre de las estaciones
+	 * @return String[]
 	 */
 	public String[] getStations() {
 		
@@ -357,5 +362,20 @@ public class MetroMadrid  extends GrafoListasAdyacencia implements IMetro, Seria
 		return s;
 		
 	}
+	
+	/**
+	 * Metodo para la gui, comprueba si ya existe una estacion
+	 */
+	public boolean yaExiste(Estacion estacion) {
+		Set<Object> s = tablaNodos.keySet();
+		Iterator<Object> it= s.iterator();
+		while(it.hasNext()) {
+			if( ((Estacion)it.next()).getNombre().equals(estacion.getNombre())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
+	
 }//end class
