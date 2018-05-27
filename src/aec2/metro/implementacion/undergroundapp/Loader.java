@@ -21,12 +21,12 @@ public class Loader {
 	          metro=(MetroMadrid) inputObject.readObject();
 		
 		} catch (FileNotFoundException e ) {
-			
+			System.out.println("File not found!");
 		}
 		catch( IOException e) {
-		
+		     System.out.println("Error to open the file");
 		}catch(ClassNotFoundException e) {
-			
+			System.out.println("class not found");
 		}
 		if( metro == null) {
 			//for goodness we pass a functional graf to avoid java.Lang.NullPointerException haha 

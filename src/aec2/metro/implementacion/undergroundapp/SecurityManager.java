@@ -1,17 +1,13 @@
 package aec2.metro.implementacion.undergroundapp;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.JFrame;
 
+import javax.swing.JPasswordField;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+
 public class SecurityManager extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
@@ -24,7 +20,6 @@ public class SecurityManager extends JDialog {
 	private JPasswordField passwordField;
 	
 	private JLabel labelPassword;
-	private JButton resetFields;
 	private JButton confirm;
 	private JButton exit;
 	
@@ -61,7 +56,7 @@ public class SecurityManager extends JDialog {
 		
 		confirm = new JButton("Aceptar");
 		exit = new JButton("Salir");
-		resetFields = new JButton("Clear");
+	
 		
 	    passwordField = new JPasswordField(20);
 		passwordField.setEchoChar('*');
